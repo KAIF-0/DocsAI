@@ -3,10 +3,11 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import Footer from "@/components/footer";
-import AuthWrapper from "./(pages)/authWrapper";
 import { Suspense } from "react";
 import LoadingOverlay from "./loading";
 import LoadingPage from "./loading";
+import AuthWrapper from "./authWrapper";
+import QueryProvider from "./QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,17 +33,19 @@ export default function RootLayout({ children }) {
         className={`${poppins.className} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 via-black to-gray-900 bg-opacity-90 `}
       >
         <Suspense fallback={<LoadingPage />}>
-          {/* <AuthWrapper/> */}
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </ThemeProvider>
+          <QueryProvider>
+            <AuthWrapper />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </ThemeProvider>
+          </QueryProvider>
         </Suspense>
       </body>
     </html>

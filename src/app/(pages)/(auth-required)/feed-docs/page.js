@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import { Globe, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import LoadingOverlay from '@/components/docsLoader';
+import { useRouter } from 'next/navigation';
 
 const SiteInsertion = () => {
   const [url, setUrl] = useState('');
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const steps = [
@@ -33,13 +35,13 @@ const SiteInsertion = () => {
   return (
     <div className="min-h-screen pt-10 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link
-          href={"/dashboard"}
+        <div
+          onClick={()=>router.back()}
           className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-8"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
-          Back to Dashboard
-        </Link>
+          Back 
+        </div>
 
         <div className="bg-gray-800/50 backdrop-blur-xl rounded-xl p-8">
           <div className="flex items-center mb-6">

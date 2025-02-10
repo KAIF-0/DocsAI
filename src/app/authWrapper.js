@@ -1,15 +1,16 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useAuthStore } from "../stores/authStore";
-import LoadingOverlay from "../loading";
+import React, { useCallback, useEffect, useState } from "react";
+import { useAuthStore } from "./stores/authStore";
 
-const AuthWrapper = () => {
+const AuthWrapper = ({ children }) => {
   const router = useRouter();
   const { getSessionInfo, cleanStore, isLoggedIn } = useAuthStore();
   const [sessionLoading, setSessionLoading] = useState(false);
 
-  const isSessionPresent = async () => await getSessionInfo();
+  const isSessionPresent = useCallback(() => {
+    return getSessionInfo();
+  }, [getSessionInfo]);
   useEffect(() => {
     setSessionLoading(true);
     console.log(isLoggedIn);
@@ -23,7 +24,8 @@ const AuthWrapper = () => {
       });
     }
     setSessionLoading(false);
-  }, []);
+
+  }, [cleanStore, isLoggedIn, isSessionPresent]);
 
   return null;
 };

@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, useEffect } from "react";
-import AuthWrapper from "./authWrapper";
 import LoadingPage from "./loading";
+import AuthWrapper from "../authWrapper";
 
 // export const metadata = {
 //   title: "DocsAI",
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
   return (
     <div>
       <Suspense fallback={<LoadingPage />}>
-        <AuthWrapper />
+      {/* <AuthWrapper/> */}
         {/* <Header /> */}
         <main>{children}</main>
         {/* <Footer /> */}

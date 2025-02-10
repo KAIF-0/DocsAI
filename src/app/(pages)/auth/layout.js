@@ -2,7 +2,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import Wrapper from "./wrapper";
+import Wrapper from "./logWrapper";
 import { Suspense, useEffect } from "react";
 import LoadingPage from "./loading";
 

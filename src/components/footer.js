@@ -33,9 +33,9 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Contact</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Email: contact@example.com</li>
-              <li>Phone: +1 (555) 123-4567</li>
-              <li>Location: New York, NY</li>
+              <li>Email: docsai@gmail.com</li>
+              <li>Phone: +91 8700979251</li>
+              <li>Location: New Delhi, Delhi</li>
             </ul>
           </div>
           <div className="space-y-4">

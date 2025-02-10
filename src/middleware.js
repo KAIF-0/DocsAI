@@ -5,7 +5,7 @@ export function middleware(request) {
   const sessionToken = request.cookies.get("sessionToken");
   const { pathname } = request.nextUrl;
 
-  console.log(sessionToken, pathname);
+//   console.log(sessionToken, pathname);
 
   //   // Public paths that don't require authentication
   //   const publicPaths = [
