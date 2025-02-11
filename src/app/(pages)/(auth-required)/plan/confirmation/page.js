@@ -6,18 +6,21 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import PaymentCard from "@/components/pricing/paymentCard";
 import ConifrmationCard from "@/components/pricing/conifrmationCard";
-import paymentGateway from "@/app/helpers/paymentGateway";
+import paymentGateway from "@/app/helpers/subscription/paymentGateway";
 import PricingToggle from "@/components/pricing/pricingToggle";
+import { createOrder } from "@/app/helpers/subscription/createOrder";
+import { useAuthStore } from "@/app/stores/authStore";
+import addSubscription from "@/app/helpers/subscription/addSubscription";
 const Page = () => {
-  const createOrder = async (body) => {
-    const { data } = await axios.post(`${env.BACKEND_URL}/createOrder`, body);
-    return data;
-  };
   const [isAnnual, setIsAnnual] = useState(false);
   const [formData, setFormData] = useState(null);
   const router = useRouter();
+  const { userId } = useAuthStore();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const submitForm = async (data) => {
+    setFormData(data);
+  };
   const proFeatures = [
     {
       title: "Unlimited Documentation Sites",
@@ -64,12 +67,14 @@ const Page = () => {
     },
   });
 
-  const submitForm = async (data) => {
-    setFormData(data);
-  };
   const handlePurchase = () => {
-    console.log(formData);
-    // mutation.mutate(formData);
+    console.log({ ...formData, amount: isAnnual ? "24.0" : "5.0" });
+    mutation.mutate({
+      ...formData,
+      userId: userId,
+      subscriptionType: isAnnual ? "annually " : "monthly",
+      amount: isAnnual ? "24.0" : "5.0",
+    });
   };
   return (
     <div className="min-h-screen pt-12 pb-12">
