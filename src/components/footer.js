@@ -21,8 +21,8 @@ export default function Footer() {
 
   return (
     <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container py-12 px-4 md:py-16">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 text-center">
+      <div className="container py-12 mx-auto px-4 md:py-16">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 text-center ">
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">About</h3>
             <p className="text-sm text-muted-foreground">
@@ -48,7 +48,7 @@ export default function Footer() {
                     target="_blank"
                     className="hover:text-primary flex justify-center items-center gap-2"
                   >
-                    <span>{data.icon}</span> 
+                    <span>{data.icon}</span>
                     <span>{data.label}</span>
                   </a>
                 </li>

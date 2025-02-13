@@ -8,12 +8,16 @@ import {
   Globe,
   Clock,
   Search,
+  CreditCard,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/app/stores/authStore";
+import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
+import { env } from "@/env";
 
 const Dashboard = () => {
   const { logout } = useAuthStore();
+  const { ispX01 } = useSubscriptionStore();
   const sites = [
     {
       id: 1,
@@ -65,10 +69,15 @@ const Dashboard = () => {
               <Plus className="h-5 w-5 mr-2" />
               Add New Site
             </Link>
-            <button className="inline-flex items-center px-4 py-2 border border-gray-700 rounded-lg shadow-sm text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-              <Settings className="h-5 w-5 mr-2" />
-              Settings
-            </button>
+            {ispX01 && (
+              <Link
+                href="/plan/details"
+                className="inline-flex items-center px-4 py-2 border border-gray-700 rounded-lg shadow-sm text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                <CreditCard className="h-5 w-5 mr-2" />
+                Plan Details
+              </Link>
+            )}
             <button
               onClick={() => logout()}
               className="inline-flex items-center px-4 py-2 border border-gray-700 rounded-lg shadow-sm text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"

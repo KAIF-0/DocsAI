@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Suspense } from "react";
-import LoadingPage from "./loading";
+import LoadingPage from "@/app/(pages)/loading";
 
 export const metadata = {
   title: "DocsAI",
@@ -11,12 +11,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-      <div>
-        <Suspense fallback={<LoadingPage/>}>
+    <div>
+      <Suspense fallback={<LoadingPage />}>
         {/* <Header /> */}
         <main>{children}</main>
         {/* <Footer /> */}
       </Suspense>
-      </div>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useCallback, useEffect, useLayoutEffect } from "react";
 import { LogIn, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/app/stores/authStore";
@@ -8,16 +8,22 @@ const GoogleSignInSuccess = () => {
   const router = useRouter();
   const { OAuthLogin } = useAuthStore();
 
-  const googleLogin = async () => await OAuthLogin();
+  const googleLogin = useCallback(() => {
+    return OAuthLogin();
+  }, [OAuthLogin]);
   useLayoutEffect(() => {
     // OAuthLogin();
     googleLogin().then((isSuccess) => {
       if (isSuccess?.success === false) {
         router.push("/");
+      } else {
+        const timer = setTimeout(() => {
+          router.push("/dashboard");
+        }, 10000);
       }
-      console.log("User is Authenticated");
+      // console.log("User is Authenticated");
     });
-  }, []);
+  }, [googleLogin, router]);
 
   return (
     <div className="my-10 md:my-20  flex items-center justify-center px-4">

@@ -1,12 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useAuthStore } from "./stores/authStore";
+import LoadingPage from "./loading";
 
 const AuthWrapper = ({ children }) => {
   const router = useRouter();
   const { getSessionInfo, cleanStore, isLoggedIn } = useAuthStore();
-  const [sessionLoading, setSessionLoading] = useState(false);
+  const [sessionLoading, setSessionLoading] = useState(true);
 
   const isSessionPresent = useCallback(() => {
     return getSessionInfo();
@@ -15,19 +16,22 @@ const AuthWrapper = ({ children }) => {
     setSessionLoading(true);
     console.log(isLoggedIn);
     if (isLoggedIn) {
-      isSessionPresent().then((sessionPresent) => {
-        console.log(sessionPresent);
-        if (sessionPresent.success === false) {
-          cleanStore();
-        }
-        console.log("Session Present!");
-      });
+      isSessionPresent() //checking appwrite session
+        .then((sessionPresent) => {
+          if (sessionPresent?.success === false) cleanStore(); //cleaning store if session is not present
+        })
+        .finally(() => setSessionLoading(false));
+    } else {
+      setSessionLoading(false);
     }
-    setSessionLoading(false);
-
   }, [cleanStore, isLoggedIn, isSessionPresent]);
 
-  return null;
+  //loading session first
+  if (sessionLoading) {
+    return <LoadingPage />;
+  }
+
+  return <>{children}</>;
 };
 
-export default AuthWrapper;
+export default memo(AuthWrapper);

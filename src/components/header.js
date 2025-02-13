@@ -16,9 +16,11 @@ import {
 import { useAuthStore } from "@/app/stores/authStore";
 import { Avatar } from "flowbite-react";
 import { usePathname } from "next/navigation";
+import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { ispX01 } = useSubscriptionStore();
   const { isLoggedIn, logout } = useAuthStore();
   const pathName = usePathname();
   const tierInfo = "free";
@@ -66,6 +68,16 @@ export function Header() {
             >
               Pricing
             </Link>
+            <Link
+              href={"/contact"}
+              className={`transition hover:text-foreground/80 ${
+                pathName === "/contact"
+                  ? "bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent"
+                  : ""
+              }`}
+            >
+              Contact
+            </Link>
           </nav>
         </div>
         <div>
@@ -99,7 +111,7 @@ export function Header() {
                     <DropdownMenuLabel>
                       <div className="flex gap-2">
                         <span>Tier :</span>
-                        {tierInfo === "free" ? (
+                        {!ispX01 ? (
                           <span>Free</span>
                         ) : (
                           <div className="flex gap-2">
@@ -145,6 +157,12 @@ export function Header() {
               className="transition hover:text-foreground/80"
             >
               Pricing
+            </Link>
+            <Link
+              href="/contact"
+              className="transition hover:text-foreground/80"
+            >
+              Contact
             </Link>
           </nav>
         </div>

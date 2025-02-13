@@ -35,8 +35,8 @@ const LandingPage = () => {
       <Hero />
       <Features />
       <Pricing />
-      <FAQ faqs = {faqs}/>
-      <Contact />
+      <FAQ faqs={faqs} />
+      <Contact title={"Get in Touch"} />
       <CTA />
     </div>
   );

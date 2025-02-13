@@ -80,7 +80,7 @@ const Pricing = () => {
           {/* Pricing Toggle */}
           <PricingToggle isAnnual={isAnnual} setIsAnnual={setIsAnnual} />
           {/* Pricing Cards */}
-          <PricingCard plans={plans} />
+          <PricingCard plans={plans} isAnnual={isAnnual}/>
           {/* FAQ Section */}
           <div className="mt-20">
             <h2 className="text-3xl font-bold text-white mb-8">

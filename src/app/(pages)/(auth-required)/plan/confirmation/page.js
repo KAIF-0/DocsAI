@@ -3,7 +3,7 @@ import { env } from "@/env";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import PaymentCard from "@/components/pricing/paymentCard";
 import ConifrmationCard from "@/components/pricing/conifrmationCard";
 import paymentGateway from "@/app/helpers/subscription/paymentGateway";
@@ -11,11 +11,15 @@ import PricingToggle from "@/components/pricing/pricingToggle";
 import { createOrder } from "@/app/helpers/subscription/createOrder";
 import { useAuthStore } from "@/app/stores/authStore";
 import addSubscription from "@/app/helpers/subscription/addSubscription";
+import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 const Page = () => {
-  const [isAnnual, setIsAnnual] = useState(false);
+  const [isAnnual, setIsAnnual] = useState(
+    useSearchParams().get("isAnnual") === "true" ? true : false || false
+  );
   const [formData, setFormData] = useState(null);
   const router = useRouter();
   const { userId } = useAuthStore();
+  const { setSubscription } = useSubscriptionStore();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const submitForm = async (data) => {
@@ -60,7 +64,7 @@ const Page = () => {
     mutationFn: createOrder,
     onSuccess: (res) => {
       console.log("Order created:", res);
-      paymentGateway(res);
+      paymentGateway(res, setSubscription);
     },
     onError: (err) => {
       console.log("Error mutating:", err.message);

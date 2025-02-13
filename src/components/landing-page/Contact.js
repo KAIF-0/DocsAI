@@ -5,7 +5,7 @@ import { Brain, Loader, Send } from "lucide-react";
 import Image from "next/image";
 import React from "react"; // Added import for React
 
-export const Contact = () => {
+export const Contact = ({title}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,7 +34,7 @@ export const Contact = () => {
     <section className="py-20 px-4">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-          Get in Touch
+          {title}
         </h2>
         <div className="flex flex-col md:flex-row items-center md:items-start gap-12">
           {/* Logo and Company Info */}

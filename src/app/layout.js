@@ -3,10 +3,10 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import Footer from "@/components/footer";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import LoadingOverlay from "./loading";
 import LoadingPage from "./loading";
-import AuthWrapper from "./authWrapper";
+const AuthWrapper = lazy(() => import("./authWrapper"));
 import QueryProvider from "./QueryProvider";
 
 const geistSans = Geist({
@@ -34,17 +34,18 @@ export default function RootLayout({ children }) {
       >
         <Suspense fallback={<LoadingPage />}>
           <QueryProvider>
-            <AuthWrapper />
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Header />
-              <main>{children}</main>
-              <Footer />
-            </ThemeProvider>
+            <AuthWrapper>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="dark"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <Header />
+                <main>{children}</main>
+                <Footer />
+              </ThemeProvider>
+            </AuthWrapper>
           </QueryProvider>
         </Suspense>
       </body>

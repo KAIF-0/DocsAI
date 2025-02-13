@@ -223,7 +223,7 @@ export const useAuthStore = create(
       },
     })),
     {
-      name: "AuthSession",
+      name: "_user/data",
       onRehydrateStorage() {
         return (state, error) => {
           if (!error) state?.setHydrated();

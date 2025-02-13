@@ -4,7 +4,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import Wrapper from "./logWrapper";
 import { Suspense, useEffect } from "react";
-import LoadingPage from "./loading";
+import LoadingPage from "../loading";
 
 // export const metadata = {
 //   title: "DocsAI",
