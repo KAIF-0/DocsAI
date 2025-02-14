@@ -1,30 +1,30 @@
 import { NextResponse } from "next/server";
 import { env } from "@/env";
+import { cookies } from "next/headers";
 
-export function middleware(request) {
-  const sessionToken = request.cookies.get("sessionToken");
-  const { pathname } = request.nextUrl;
+export async function middleware(request) {
+  // const pathname = request.nextUrl.pathname;
+  // const sessionToken = await request.cookies.get("sessionToken")?.value;
+  // // console.log(sessionToken);
 
-//   console.log(sessionToken, pathname);
+  // const authProtectedRoutes = ["/chat", "/dashboard", "/feed-docs", "/plan"];
 
-  //   // Public paths that don't require authentication
-  //   const publicPaths = [
-  //     "/",
-  //     "/auth/login",
-  //     "/auth/signup",
-  //     "/auth/signup/otp",
-  //     "/auth/signup/success",
-  //     "/auth/google/success",
-  //   ];
-
-  //   // Check if the current path is public
-  //   const isPublicPath = publicPaths.some(path => pathname.startsWith(path));
-
-  //   // If no session token and trying to access protected route
-  //   if (!sessionToken && !isPublicPath) {
-  //     return NextResponse.redirect(new URL("/auth/login", request.url));
+  // //auth middleware
+  // if (authProtectedRoutes.some((route) => pathname.startsWith(route))) {
+  //   if (!sessionToken) {
+  //     console.log("No session token found. Redirecting to Sign-In page");
+  //     return NextResponse.redirect(new URL("/auth/signin", request.url));
   //   }
+  // }
 
+  // //if user is already logged in so protecting auth routes
+  // const loggedInProtectedRoutes = ["/auth"];
+  // if (loggedInProtectedRoutes.some((route) => pathname.startsWith(route))) {
+  //   if (sessionToken) {
+  //     console.log("User already logged in! Redirecting to Dashboard...");
+  //     return NextResponse.redirect(new URL("/dashboard", request.url));
+  //   }
+  // }
   return NextResponse.next();
 }
 

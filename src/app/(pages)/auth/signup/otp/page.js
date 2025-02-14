@@ -1,19 +1,21 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Brain, ArrowLeft, RefreshCw, CheckCircle } from "lucide-react";
+import { Brain, ArrowLeft, RefreshCw, CheckCircle, Loader } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/app/stores/authStore";
+import toast from "react-hot-toast";
+import Toast from "@/components/toast";
 
 const SignUpOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(30);
   const [isResending, setIsResending] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
   const inputRefs = useRef([]);
   const router = useRouter();
   const { userId, isLoggedIn, verifyOTP, email, login } = useAuthStore();
-  const username = useSearchParams()?.get('username') || 'user'; 
-
+  const username = useSearchParams()?.get("username") || "user";
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
@@ -71,21 +73,26 @@ const SignUpOTP = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLoggedIn) {
-        console.log("ALready logged in!");
-        return;
-      }
+      console.log("ALready logged in!");
+      return;
+    }
+
+    setLoading(true);
     const otpString = otp.join("");
     console.log(otpString, userId);
 
     if (otpString.length === 6) {
-      const optSuccess = await verifyOTP(userId, otpString, username);
-      if (optSuccess.success) {
+      const otpSuccess = await verifyOTP(userId, otpString, username);
+      if (otpSuccess.success) {
         router.push("/auth/signup/success");
       } else {
         console.log("Error verifying OTP");
-        alert("Failed to verify OTP!");
+        toast.custom(<Toast type="error" message={otpSuccess.message} />, {
+          position: "bottom-right",
+        });
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -141,10 +148,15 @@ const SignUpOTP = () => {
               </div>
 
               <button
+                disabled={otp.join("").length !== 6}
                 type="submit"
                 className="w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-[1.02]"
               >
-                Verify Email
+                {loading ? (
+                  <Loader className="animate-spin mx-auto" />
+                ) : (
+                  "Verify Email"
+                )}
               </button>
             </form>
           )}

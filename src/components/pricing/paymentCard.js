@@ -115,7 +115,7 @@ const PaymentCard = ({
       </div>
 
       {/* Right Side - Form */}
-      <div className="max-w-lg w-full max-h-fit space-y-8 bg-gradient-to-br from-black/20 via-black/10 to-black/20 backdrop-blur-3xl rounded-2xl p-14 border border-white/40 shadow-xl">
+      <div className="max-w-lg w-full max-h-fit space-y-8 bg-gradient-to-br from-black/20 via-black/10 to-black/20 backdrop-blur-3xl rounded-2xl p-10 border border-white/40 shadow-xl">
         <h2 className="text-2xl font-bold text-white mb-6">
           Complete Your Purchase
         </h2>

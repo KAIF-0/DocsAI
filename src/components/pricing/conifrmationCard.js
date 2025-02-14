@@ -18,7 +18,7 @@ const ConifrmationCard = ({
   isAnnual,
 }) => {
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-lg flex items-center justify-center z-50 p-4">
       <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full animate-[float_0.3s_ease-out]">
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center">

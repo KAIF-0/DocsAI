@@ -52,6 +52,16 @@ export const useSubscriptionStore = create(
         }
       },
 
+      getSubscriptionDetails: async ({ queryKey }) => {
+        const [, userId] = queryKey;
+        console.log('Fetching subscription details...');
+
+        const response = await axios.get(
+          `${env.BACKEND_URL}/subscription/getDetails/${userId}`
+        );
+        return response.data;
+      },
+
       cleanStore: async () => {
         try {
           console.log("Cleaning Subscription Store!");
@@ -67,12 +77,6 @@ export const useSubscriptionStore = create(
           };
         } catch (error) {
           console.log("Error Cleaning Store!", error);
-          Cookies.remove("sessionToken");
-          set({
-            ispX01: false,
-            type: "free",
-            details: null,
-          });
           return {
             success: false,
           };

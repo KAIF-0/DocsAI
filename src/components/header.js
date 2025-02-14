@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Github, Wrench, Menu, X, Brain, Star } from "lucide-react";
+import { Github, Wrench, Menu, X, Brain, Star, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -133,9 +133,10 @@ export function Header() {
                 </DropdownMenu>
               </div>
             ) : (
-              <Button asChild className="hidden sm:flex px-4">
-                <Link href={"/auth/signin"}>Get Started</Link>
-              </Button>
+              <Link href="/auth/signin" className="flex items-center space-x-1 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 transition-colors">
+              {/* <LogIn className="h-4 w-4" /> */}
+              <span>Get Started</span>
+            </Link>
             )}
           </div>
         </div>

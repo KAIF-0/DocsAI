@@ -2,6 +2,7 @@
 import { Suspense, useEffect } from "react";
 import LoadingPage from "./loading";
 import AuthWrapper from "../authWrapper";
+import { Toaster } from "react-hot-toast";
 
 // export const metadata = {
 //   title: "DocsAI",
@@ -16,7 +17,8 @@ export default function RootLayout({ children }) {
   return (
     <div>
       <Suspense fallback={<LoadingPage />}>
-      {/* <AuthWrapper/> */}
+        <Toaster />
+        {/* <AuthWrapper/> */}
         {/* <Header /> */}
         <main>{children}</main>
         {/* <Footer /> */}

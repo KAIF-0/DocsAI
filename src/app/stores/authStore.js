@@ -150,7 +150,7 @@ export const useAuthStore = create(
             userId: null,
             username: null,
           });
-          const result = await account.deleteSession("current");
+          await account.deleteSession("current");
 
           console.log("User Logged Out Successfully!");
 
@@ -189,7 +189,6 @@ export const useAuthStore = create(
       cleanStore: async () => {
         try {
           console.log("Cleaning Store!");
-          await account.deleteSession("current");
 
           Cookies.remove("sessionToken");
           set({
@@ -199,19 +198,14 @@ export const useAuthStore = create(
             userId: null,
             username: null,
           });
+
+          //just for confirmation deleting session
+          await account.deleteSession("current");
           return {
             success: true,
           };
         } catch (error) {
           console.log("Error Cleaning Store!", error);
-          Cookies.remove("sessionToken");
-          set({
-            email: null,
-            isLoggedIn: false,
-            user: null,
-            userId: null,
-            username: null,
-          });
           return {
             success: false,
           };

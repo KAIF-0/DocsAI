@@ -1,15 +1,18 @@
 "use client";
 import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, UserPlus, Brain, User } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, UserPlus, Brain, User, Loader } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/app/stores/authStore";
 import { account } from "@/configs/appwrite/appwrite-config";
 import { useRouter } from "next/navigation";
 import { loginWithOAuth } from "@/app/helpers/oAuthLogin";
+import toast from "react-hot-toast";
+import Toast from "@/components/toast";
 
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { login, logout } = useAuthStore();
@@ -43,15 +46,21 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      alert("Please enter a valid email address!");
+      toast.custom(<Toast type="error" message={"Enter a valid Email!"} />, {
+        position: "bottom-right",
+      });
       return;
     }
-    const sigin = await login(email);
-    if (sigin.success) {
-      alert("Accout created successfully!");
-      router.push(`/auth/signup/otp?username=${name}`);
+    setLoading(true);
+    const signup = await login(email);
+    if (signup.success) {
+      router.push("/auth/signup/otp");
     } else {
+      toast.custom(<Toast type="error" message={signup.message} />, {
+        position: "bottom-right",
+      });
     }
+    setLoading(false);
   };
 
   const passwordStrength = calculatePasswordStrength(password);
@@ -67,7 +76,7 @@ const SignUp = () => {
               DocsAI
             </span>
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-white">
+          <h2 className="mt-6 text-3xl font-bold text-white text-center">
             Create your account
           </h2>
           <p className="mt-2 text-gray-400">Start your journey with DocsAI</p>
@@ -197,11 +206,18 @@ const SignUp = () => {
             </div>
 
             <button
+              disabled={loading}
               type="submit"
               className="w-full flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-[1.02]"
             >
-              <UserPlus className="w-5 h-5 mr-2" />
-              Sign up
+              {loading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                <span className="flex">
+                  <UserPlus className="w-5 h-5 mr-2" />
+                  Sign up
+                </span>
+              )}
             </button>
           </form>
 

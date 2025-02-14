@@ -26,16 +26,11 @@ import LoadingPage from "@/app/(pages)/loading";
 const SubscriptionDetails = () => {
   const { userId } = useAuthStore();
   const router = useRouter();
-  const { details } = useSubscriptionStore();
+  const { details, getSubscriptionDetails } = useSubscriptionStore();
   let subscription;
   const { data, isLoading, error, isSuccess, isError } = useQuery({
-    queryKey: ["subscriptionDetails"],
-    queryFn: async () => {
-      const response = await axios.get(
-        `${env.BACKEND_URL}/subscription/getDetails/${userId}`
-      );
-      return response.data;
-    },
+    queryKey: ["subscriptionDetails", userId],
+    queryFn: getSubscriptionDetails,
   });
 
   if (isLoading) return <LoadingPage />;

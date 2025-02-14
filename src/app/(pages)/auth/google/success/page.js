@@ -11,7 +11,7 @@ const GoogleSignInSuccess = () => {
   const googleLogin = useCallback(() => {
     return OAuthLogin();
   }, [OAuthLogin]);
-  useLayoutEffect(() => {
+  useEffect(() => {
     // OAuthLogin();
     googleLogin().then((isSuccess) => {
       if (isSuccess?.success === false) {
