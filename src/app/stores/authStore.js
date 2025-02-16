@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
-import { ID, Query } from "appwrite";
+import { AppwriteException, ID, Query } from "appwrite";
 import { account } from "@/configs/appwrite/appwrite-config";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -28,14 +28,11 @@ export const useAuthStore = create(
               message: "Invalid email!",
             };
           }
-          const sessionToken = await account.createEmailToken(
-            ID.unique(),
-            email
-          );
+          const session = await account.createEmailToken(ID.unique(), email);
 
-          console.log(sessionToken);
+          console.log(session);
 
-          if (!sessionToken) {
+          if (!session) {
             return {
               success: false,
               message: "Failed to create session!",
@@ -44,7 +41,7 @@ export const useAuthStore = create(
 
           set({
             email: email,
-            userId: sessionToken.userId,
+            userId: session.userId,
             hydrated: true,
           });
 
@@ -55,7 +52,7 @@ export const useAuthStore = create(
         } catch (error) {
           console.log(error);
           return {
-            message: "Failed to send OTP!",
+            message: "Failed to send OTP! Try again later...",
             success: false,
           };
         }
@@ -69,7 +66,7 @@ export const useAuthStore = create(
           const userInfo = await account.get();
           console.log("USERINFO:  ", userInfo);
 
-          //just for middleware setup
+          //for middleware trigger
           Cookies.set("sessionToken", sessionInfo.$id, {
             secure: true,
             expires: 30,
@@ -105,11 +102,6 @@ export const useAuthStore = create(
             };
           }
 
-          Cookies.set("sessionToken", session.$id, {
-            secure: true,
-            expires: 30,
-          });
-
           const sessionInfo = await account.getSession("current");
           console.log("SESSION:  ", sessionInfo);
 
@@ -121,6 +113,8 @@ export const useAuthStore = create(
             console.log("User name updated!");
           }
 
+          console.log("OTP verified successfully!");
+
           set({
             isLoggedIn: true,
             user: userInfo,
@@ -128,13 +122,44 @@ export const useAuthStore = create(
           });
           return {
             success: true,
-            message: "Logged in successfully!",
+            message: "OTP verified successfully!",
           };
         } catch (error) {
           console.log("Error verifying OTP:", error);
+          if (
+            error?.message.includes(
+              "Creation of a session is prohibited when a session is active."
+            )
+          ) {
+            console.log("Cleaning up current session!");
+            await account.deleteSession("current");
+          }
           return {
             success: false,
             message: "Invalid OTP!",
+          };
+        }
+      },
+
+      setAuthCookies: async () => {
+        try {
+          const sessionInfo = await account.getSession("current");
+
+          Cookies.set("sessionToken", sessionInfo.$id, {
+            secure: true,
+            expires: 30,
+          });
+
+          console.log("Cookies saved successfully!");
+          return {
+            success: true,
+            message: "Cookies set successfully!",
+          };
+        } catch (error) {
+          console.log("Error saving Cookies:", error);
+          return {
+            success: false,
+            message: "Failed to set cookies!",
           };
         }
       },
@@ -199,7 +224,7 @@ export const useAuthStore = create(
             username: null,
           });
 
-          //just for confirmation deleting session
+          //just for confirmation (removing session)
           await account.deleteSession("current");
           return {
             success: true,

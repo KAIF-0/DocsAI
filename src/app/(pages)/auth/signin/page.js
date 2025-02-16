@@ -19,7 +19,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      toast.custom(<Toast type="error" message={"Enter a valid Email!"} />, {
+      toast.custom(<Toast type="warning" message={"Enter a valid Email!"} />, {
         position: "bottom-right",
       });
       return;

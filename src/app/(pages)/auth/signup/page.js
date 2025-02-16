@@ -1,6 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, UserPlus, Brain, User, Loader } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  UserPlus,
+  Brain,
+  User,
+  Loader,
+} from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/app/stores/authStore";
 import { account } from "@/configs/appwrite/appwrite-config";
@@ -46,7 +55,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      toast.custom(<Toast type="error" message={"Enter a valid Email!"} />, {
+      toast.custom(<Toast type="warning" message={"Enter a valid Email!"} />, {
         position: "bottom-right",
       });
       return;

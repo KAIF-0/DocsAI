@@ -2,16 +2,18 @@
 import React, { useEffect } from "react";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/app/stores/authStore";
 
 const SignInSuccess = () => {
   const router = useRouter();
-
+  const { setAuthCookies } = useAuthStore();
   useEffect(() => {
+    setAuthCookies();
     const timer = setTimeout(() => {
       router.push("/dashboard");
     }, 10000);
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [router, setAuthCookies]);
 
   return (
     <div className="my-16 md:my-24 flex items-center justify-center px-4">

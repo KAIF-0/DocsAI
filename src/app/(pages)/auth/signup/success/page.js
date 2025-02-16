@@ -2,16 +2,19 @@
 import React, { useEffect } from "react";
 import { PartyPopper, Rocket, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/app/stores/authStore";
 
 const SignUpSuccess = () => {
   const router = useRouter();
+  const { setAuthCookies } = useAuthStore();
 
   useEffect(() => {
+    setAuthCookies();
     const timer = setTimeout(() => {
       router.push("/dashboard");
     }, 10000);
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [router, setAuthCookies]);
 
   return (
     <div className="my-10 md:my-24 flex items-center justify-center px-4">

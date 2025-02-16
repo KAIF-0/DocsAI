@@ -71,10 +71,6 @@ const SignInOTP = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isLoggedIn) {
-      console.log("ALready logged in!");
-      return;
-    }
     setLoading(true);
     const otpString = otp.join("");
     console.log(otpString, userId);
@@ -82,6 +78,9 @@ const SignInOTP = () => {
     if (otpString.length === 6) {
       const otpSuccess = await verifyOTP(userId, otpString);
       if (otpSuccess.success) {
+        toast.custom(<Toast type="success" message={otpSuccess.message} />, {
+          position: "bottom-right",
+        });
         router.push("/auth/signin/success");
       } else {
         console.log("Error verifying OTP");
