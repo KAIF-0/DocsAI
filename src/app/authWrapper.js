@@ -5,16 +5,14 @@ import { useAuthStore } from "./stores/authStore";
 import InitialLoadingPage from "./loading";
 
 const AuthWrapper = ({ children }) => {
-  const router = useRouter();
-  const { getSessionInfo, cleanStore } = useAuthStore();
-  const [sessionLoading, setSessionLoading] = useState(true);
+  // const { getSessionInfo, cleanStore } = useAuthStore();
+  // const [sessionLoading, setSessionLoading] = useState(true);
 
   // const isSessionPresent = useCallback(() => {
   //   return getSessionInfo();
   // }, [getSessionInfo]);
   // useEffect(() => {
   //   setSessionLoading(true);
-  //   // console.log(isLoggedIn);
   //   // if (isLoggedIn) {
   //   isSessionPresent() //checking appwrite auth session
   //     .then((sessionPresent) => {

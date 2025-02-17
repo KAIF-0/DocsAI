@@ -81,6 +81,7 @@ export const useAuthStore = create(
           });
           return {
             success: true,
+            message: "Logged in successfully via Google!",
           };
         } catch (error) {
           console.log(error);
@@ -153,13 +154,13 @@ export const useAuthStore = create(
           console.log("Cookies saved successfully!");
           return {
             success: true,
-            message: "Cookies set successfully!",
+            message: "Cookies saved successfully!",
           };
         } catch (error) {
           console.log("Error saving Cookies:", error);
           return {
             success: false,
-            message: "Failed to set cookies!",
+            message: "Failed to saved cookies!",
           };
         }
       },

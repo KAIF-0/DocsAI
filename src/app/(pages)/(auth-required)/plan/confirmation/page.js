@@ -8,9 +8,7 @@ import PaymentCard from "@/components/pricing/paymentCard";
 import ConifrmationCard from "@/components/pricing/conifrmationCard";
 import paymentGateway from "@/app/helpers/subscription/paymentGateway";
 import PricingToggle from "@/components/pricing/pricingToggle";
-import { createOrder } from "@/app/helpers/subscription/createOrder";
 import { useAuthStore } from "@/app/stores/authStore";
-import addSubscription from "@/app/helpers/subscription/addSubscription";
 import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 const Page = () => {
   const [isAnnual, setIsAnnual] = useState(
@@ -19,7 +17,7 @@ const Page = () => {
   const [formData, setFormData] = useState(null);
   const router = useRouter();
   const { userId } = useAuthStore();
-  const { setSubscription } = useSubscriptionStore();
+  const { createOrder, addSubscription } = useSubscriptionStore();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const submitForm = async (data) => {
@@ -62,9 +60,9 @@ const Page = () => {
   ];
   const mutation = useMutation({
     mutationFn: createOrder,
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       console.log("Order created:", res);
-      paymentGateway(res, setSubscription);
+      paymentGateway(res, addSubscription);
     },
     onError: (err) => {
       console.log("Error mutating:", err.message);

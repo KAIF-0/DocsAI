@@ -31,8 +31,8 @@ const InitialLoadingPage = () => {
             {/* Fixed height container for step text */}
             <div className="transition-all duration-500 animate-[float_0.5s_ease-out]">
               <div className="flex items-center justify-center space-x-2 text-gray-300">
-                <Sparkles className="w-6 h-6" />
-                <span>Loading Content</span>
+                <Sparkles className="w-6 h-6 animate-spin" />
+                <span>Loading Content...</span>
               </div>
             </div>
           </div>

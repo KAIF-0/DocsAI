@@ -14,12 +14,12 @@ const GoogleSignInSuccess = () => {
   useEffect(() => {
     // OAuthLogin();
     googleLogin().then((isSuccess) => {
-      if (isSuccess?.success === false) {
-        router.push("/");
-      } else {
+      if (isSuccess?.success) {
         const timer = setTimeout(() => {
           router.push("/dashboard");
         }, 10000);
+      } else {
+        router.push("/");
       }
       // console.log("User is Authenticated");
     });

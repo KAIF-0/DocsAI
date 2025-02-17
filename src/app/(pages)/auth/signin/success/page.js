@@ -8,11 +8,15 @@ const SignInSuccess = () => {
   const router = useRouter();
   const { setAuthCookies } = useAuthStore();
   useEffect(() => {
-    setAuthCookies();
-    const timer = setTimeout(() => {
-      router.push("/dashboard");
-    }, 10000);
-    return () => clearTimeout(timer);
+    setAuthCookies().then((isCookiesSaved) => {
+      if (isCookiesSaved?.success) {
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 10000);
+      } else {
+        console.log(isCookiesSaved?.message);
+      }
+    });
   }, [router, setAuthCookies]);
 
   return (
