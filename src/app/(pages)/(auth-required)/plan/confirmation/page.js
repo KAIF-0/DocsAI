@@ -60,7 +60,7 @@ const Page = () => {
   ];
   const mutation = useMutation({
     mutationFn: createOrder,
-    onSuccess: async (res) => {
+    onSuccess:  (res) => {
       console.log("Order created:", res);
       paymentGateway(res, addSubscription);
     },

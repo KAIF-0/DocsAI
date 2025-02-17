@@ -13,15 +13,16 @@ const GoogleSignInSuccess = () => {
   }, [OAuthLogin]);
   useEffect(() => {
     // OAuthLogin();
-    googleLogin().then((isSuccess) => {
-      if (isSuccess?.success) {
-        const timer = setTimeout(() => {
+    googleLogin().then((response) => {
+      if (response?.success) {
+        console.log(response.message);
+        setTimeout(() => {
           router.push("/dashboard");
         }, 10000);
       } else {
+        console.log("Google Login Error: ", response.message);
         router.push("/");
       }
-      // console.log("User is Authenticated");
     });
   }, [googleLogin, router]);
 
