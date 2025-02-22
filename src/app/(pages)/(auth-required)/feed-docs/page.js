@@ -13,13 +13,20 @@ import {
   Loader2,
   CheckCircle,
 } from "lucide-react";
+import toast from "react-hot-toast";
+import Toast from "@/components/toast";
+import { useMutation } from "@tanstack/react-query";
+import { useAuthStore } from "@/app/stores/authStore";
+import { createChat } from "@/app/helpers/chatHelper";
 
 const SiteInsertion = () => {
   const [url, setUrl] = useState("");
   const router = useRouter();
+  const [chatId, setChatId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [isComplete, setIsComplete] = useState(false); // New state to track completion
+  const [isComplete, setIsComplete] = useState(false);
+  const { userId } = useAuthStore();
 
   const steps = [
     {
@@ -53,19 +60,67 @@ const SiteInsertion = () => {
       color: "red",
     },
   ];
+  const docs_mutation = useMutation({
+    mutationFn: createChat,
+    onSuccess: (res) => {
+      console.log("Success mutating:", res);
+      setChatId(res?.chat.id);
+      setIsComplete(true);
+    },
+    onError: (err) => {
+      console.log("Error mutating:", err.message);
+      toast.custom(
+        <Toast
+          type="error"
+          message="Failed to process documentation. Please try again!"
+        />,
+        {
+          position: "bottom-right",
+        }
+      );
+    },
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // checking if url contains /docs endpoint
+    if (!url.includes("/docs")) {
+      toast.custom(
+        <Toast
+          type="warning"
+          message="Please enter a valid documentation URL that should contain '/docs' endpoint!"
+        />,
+        {
+          position: "bottom-right",
+        }
+      );
+      return;
+    }
     setIsLoading(true);
 
-    // Simulate the loading process
-    for (let i = 0; i < steps.length; i++) {
-      setCurrentStep(i);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    }
+    const loadingInterval = setInterval(async () => {
+      setCurrentStep((prev) => {
+        if (prev === steps.length - 1) {
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 2000);
 
-    setIsLoading(false);
-    setIsComplete(true); // Mark the process as complete
+    try {
+      await docs_mutation.mutateAsync({
+        userId,
+        url,
+      });
+
+      // clearInterval(loadingInterval);
+    } catch (error) {
+      console.log("Error submitting:", error.message);
+    } finally {
+      clearInterval(loadingInterval);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -168,7 +223,7 @@ const SiteInsertion = () => {
                   </div>
                 </div>
                 <Link
-                  href="/chat"
+                  href={`/chat/${chatId}`}
                   className="max-w-fit mx-auto flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-[1.02]"
                 >
                   Start with Your Docs

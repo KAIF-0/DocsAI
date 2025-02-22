@@ -8,6 +8,7 @@ import LoadingOverlay from "./loading";
 import InitialLoadingPage from "./loading";
 import AuthWrapper from "./authWrapper";
 import QueryProvider from "./QueryProvider";
+import SubscriptionWrapper from "./subscriptionWrapper";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
       <body className={``}>
         <Suspense fallback={<InitialLoadingPage />}>
           <QueryProvider>
+            <SubscriptionWrapper />
             <AuthWrapper>
               <ThemeProvider
                 attribute="class"

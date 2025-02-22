@@ -31,12 +31,13 @@ const SubscriptionDetails = () => {
   const { data, isLoading, error, isSuccess, isError } = useQuery({
     queryKey: ["subscriptionDetails", userId],
     queryFn: getSubscriptionDetails,
+    staleTime: 10 * 60 * 1000,
   });
 
   if (isLoading) return <LoadingPage />;
   if (isSuccess) {
     console.log("Successfully loaded subscription");
-    subscription = data.subscription;
+    subscription = data.subscriptionDetails;
   }
 
   return (

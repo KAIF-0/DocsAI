@@ -58,9 +58,9 @@ const Page = () => {
         "Detailed analytics and insights about your documentation usage.",
     },
   ];
-  const mutation = useMutation({
+  const subcription_mutation = useMutation({
     mutationFn: createOrder,
-    onSuccess:  (res) => {
+    onSuccess: (res) => {
       console.log("Order created:", res);
       paymentGateway(res, addSubscription);
     },
@@ -71,7 +71,7 @@ const Page = () => {
 
   const handlePurchase = () => {
     console.log({ ...formData, amount: isAnnual ? "24.0" : "5.0" });
-    mutation.mutate({
+    subcription_mutation.mutate({
       ...formData,
       userId: userId,
       subscriptionType: isAnnual ? "annually " : "monthly",

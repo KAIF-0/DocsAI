@@ -13,7 +13,8 @@ export const useSubscriptionStore = create(
   persist(
     immer((set) => ({
       ispX01: false,
-      type: "free",
+      subscription: "free",
+      subscriptionType: null,
       details: null,
 
       hydrated: false,
@@ -44,7 +45,8 @@ export const useSubscriptionStore = create(
 
           set({
             ispX01: true,
-            type: subscriptionDetails.subscriptionType,
+            subscription: "Pro",
+            subscriptionType: subscriptionDetails.subscriptionType,
             details: subscriptionDetails,
           });
 
@@ -59,6 +61,61 @@ export const useSubscriptionStore = create(
           return {
             success: false,
             message: "An error occurred while adding the subscription",
+          };
+        }
+      },
+
+      setSubscriptionDetails: async (userId) => {
+        //just for optimizing
+        if (!userId) {
+          return {
+            success: false,
+            message: "User ID is required",
+          };
+        }
+        try {
+          const response = await axios.get(
+            `${env.BACKEND_URL}/subscription/getDetails/${userId}`
+          );
+          if (!response) {
+            return {
+              success: false,
+              message: "No subscription found!",
+            };
+          }
+          const { subscriptionDetails } = response?.data;
+          console.log("Subscription details:", subscriptionDetails);
+
+          //for middleware
+          Cookies.set("subToken", subscriptionDetails.id, {
+            secure: true,
+            expires: 30,
+          });
+
+          set({
+            ispX01: true,
+            subscription: "Pro",
+            subscriptionType: subscriptionDetails.subscriptionType,
+            details: subscriptionDetails,
+          });
+          return {
+            success: true,
+            message: "Subscription details fetched successfully!",
+          };
+        } catch (error) {
+          console.log(error);
+
+          //cleaning store
+          Cookies.remove("subToken");
+          set({
+            ispX01: false,
+            subscription: "Free",
+            subscriptionType: null,
+            details: null,
+          });
+          return {
+            success: false,
+            message: "An error occurred while fetching subscription details",
           };
         }
       },
@@ -88,7 +145,8 @@ export const useSubscriptionStore = create(
           Cookies.remove("subToken");
           set({
             ispX01: false,
-            type: "free",
+            subscription: "Free",
+            subscriptionType: null,
             details: null,
           });
           return {

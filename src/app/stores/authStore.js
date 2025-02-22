@@ -119,7 +119,7 @@ export const useAuthStore = create(
           set({
             isLoggedIn: true,
             user: userInfo,
-            username: username,
+            username: userInfo.name || username,
           });
           return {
             success: true,
@@ -161,6 +161,27 @@ export const useAuthStore = create(
           return {
             success: false,
             message: "Failed to saved cookies!",
+          };
+        }
+      },
+
+      updateUsername: async (name) => {
+        try {
+          set({
+            username: name,
+          });
+          await account.updateName(name);
+          console.log("User name updated!");
+
+          return {
+            success: true,
+            message: "User name updated successfully!",
+          };
+        } catch (error) {
+          console.log("Error updating user name:", error);
+          return {
+            success: false,
+            message: "Failed to update user name!",
           };
         }
       },
