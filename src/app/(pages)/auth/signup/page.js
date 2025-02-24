@@ -244,7 +244,7 @@ const SignUp = () => {
 
             <div className="mt-6">
               <button
-                onClick={() => loginWithOAuth()}
+                onClick={() => loginWithOAuth("google")}
                 type="button"
                 className="w-full flex justify-center items-center px-4 py-2 border border-gray-700 rounded-lg shadow-sm text-base font-medium text-white bg-gray-900/50 hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transform transition-all duration-200 hover:scale-[1.02]"
               >

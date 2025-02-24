@@ -11,3 +11,12 @@ export const getUserChats = async ({ queryKey }) => {
   const res = await axios.get(`${env.BACKEND_URL}/chat/getUserChats/${userId}`);
   return res.data;
 };
+
+export const getResponse = async (body) => {
+  console.log(body.chatId);
+  const res = await axios.post(
+    `${env.BACKEND_URL}/chat/getResponse/${body.chatId}`,
+    body
+  );
+  return res.data;
+};

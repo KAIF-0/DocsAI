@@ -5,7 +5,7 @@ import { Brain, Loader, Send } from "lucide-react";
 import Image from "next/image";
 import React from "react"; // Added import for React
 
-export const Contact = ({title}) => {
+export const Contact = ({ title }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -96,11 +96,12 @@ export const Contact = ({title}) => {
             <form
               action="https://formsubmit.co/kaif8700979251@gmail.com"
               method="POST"
+              className="space-y-3"
             >
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-300 mb-1"
+                  className="block text-lg font-medium text-gray-300 mb-1"
                 >
                   Name
                 </label>
@@ -118,7 +119,7 @@ export const Contact = ({title}) => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-300 mb-1"
+                  className="block text-lg font-medium text-gray-300 mb-1"
                 >
                   Email
                 </label>
@@ -136,7 +137,7 @@ export const Contact = ({title}) => {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-gray-300 mb-1"
+                  className="block text-lg font-medium text-gray-300 mb-1"
                 >
                   Message
                 </label>

@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 export async function middleware(request) {
   // const pathname = request.nextUrl.pathname;
   // const sessionToken = await request.cookies.get("sessionToken")?.value;
+  // const subscriptionToken = await request.cookies.get("subToken")?.value;
   // // console.log(sessionToken);
 
   // const authProtectedRoutes = ["/chat", "/dashboard", "/feed-docs", "/plan"];
@@ -23,6 +24,15 @@ export async function middleware(request) {
   //   if (sessionToken) {
   //     console.log("User already logged in! Redirecting to Dashboard...");
   //     return NextResponse.redirect(new URL("/dashboard", request.url));
+  //   }
+  // }
+
+  // if (pathname === "/plan/details") {
+  //   if (!subscriptionToken) {
+  //     console.log(
+  //       "No subscription token found. Redirecting to subscription plans page!"
+  //     );
+  //     return NextResponse.redirect(new URL("/pricing", request.url));
   //   }
   // }
   return NextResponse.next();
