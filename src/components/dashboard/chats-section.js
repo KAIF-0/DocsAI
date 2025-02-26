@@ -19,7 +19,7 @@ const Chats = () => {
   const { userId } = useAuthStore();
   const router = useRouter();
   const { data, isLoading, error, isSuccess, isError } = useQuery({
-    queryKey: ["userChats", userId],
+    queryKey: ["dashboardUserChats", userId],
     queryFn: getUserChats,
     staleTime: 10 * 60 * 1000,
   });
@@ -27,10 +27,9 @@ const Chats = () => {
   //counting messages
   const messageCounts = useMemo(() => {
     console.log("Calculating message counts");
-    return data?.chats.reduce(
-      (total, chat) => total + chat?.messages.length,
-      0
-    );
+    return data?.chats.length === 0
+      ? 0
+      : data?.chats.reduce((total, chat) => total + chat?.messages.length, 0);
   }, [data]);
 
   return (
@@ -69,36 +68,38 @@ const Chats = () => {
                     </div>
                   </div>
                 </>
-              ) : data ? (
+              ) : data && data?.chats.length > 0 ? (
                 data?.chats.slice(0, 3).map((chat) => (
                   <div
                     key={chat.id}
                     className="bg-gray-900/50 rounded-lg p-4 hover:bg-gray-700/50 transition-colors"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center">
-                        <Globe className="h-5 w-5 text-blue-400 mr-3" />
-                        <div>
-                          <h3 className="text-lg font-medium text-white">
-                            {chat.key.charAt(0).toUpperCase() +
-                              chat.key.slice(1)}{" "}
-                            Documentation
-                          </h3>
-                          <p className="text-sm text-gray-400">{chat.url}</p>
+                    <Link href={`/chat/${chat.id}`}>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center">
+                          <Globe className="h-5 w-5 text-blue-400 mr-3" />
+                          <div>
+                            <h3 className="text-lg font-medium text-white">
+                              {chat.key.charAt(0).toUpperCase() +
+                                chat.key.slice(1)}{" "}
+                              Documentation
+                            </h3>
+                            <p className="text-sm text-gray-400">{chat.url}</p>
+                          </div>
                         </div>
-                      </div>
-                      <span
-                        className="px-2 py-1 text-xs font-medium rounded-full
+                        <span
+                          className="px-2 py-1 text-xs font-medium rounded-full
                                  bg-green-500/20 text-green-400"
-                      >
-                        Active
-                      </span>
-                    </div>
-                    <div className="mt-3 flex items-center text-sm text-gray-400">
-                      <Clock className="size-4 mr-2" />
-                      Last updated{" "}
-                      {new Date(chat.createdAt).toLocaleDateString()}
-                    </div>
+                        >
+                          Active
+                        </span>
+                      </div>
+                      <div className="mt-3 flex items-center text-sm text-gray-400">
+                        <Clock className="size-4 mr-2" />
+                        Last updated{" "}
+                        {new Date(chat.createdAt).toLocaleDateString()}
+                      </div>
+                    </Link>
                   </div>
                 ))
               ) : (
@@ -136,7 +137,9 @@ const Chats = () => {
                     </div>
                   </div>
                 </>
-              ) : data ? (
+              ) : data &&
+                data?.chats.length > 0 &&
+                data?.chats[0].messages.length > 0 ? (
                 <div className="space-y-4">
                   {data?.chats[0].messages.slice(0, 2).map((message) => (
                     <Link
@@ -145,7 +148,9 @@ const Chats = () => {
                       className="block bg-gray-900/50 rounded-lg p-4 hover:bg-gray-700/50 transition-colors"
                     >
                       <div className="flex items-start">
-                        <MessageSquare className="h-5 w-5 text-purple-400 mr-3 mt-1" />
+                        <span>
+                          <MessageSquare className="h-5 w-5 text-purple-400 mr-3 mt-1" />
+                        </span>
                         <div>
                           <h3 className="text-lg font-medium text-white line-clamp-1">
                             {message.question}
@@ -186,13 +191,13 @@ const Chats = () => {
               <div className="bg-gray-900/50 rounded-lg p-4">
                 <p className="text-sm text-gray-400">Total Sites</p>
                 <p className="text-2xl font-bold text-white">
-                  {data ? data.chats.length : 0}
+                  {data && data?.chats.length > 0 ? data?.chats.length : 0}
                 </p>
               </div>
               <div className="bg-gray-900/50 rounded-lg p-4">
                 <p className="text-sm text-gray-400">Total Chats</p>
                 <p className="text-2xl font-bold text-white">
-                  {data ? messageCounts : 0}
+                  {data && data?.chats.length > 0 ? messageCounts : 0}
                 </p>
               </div>
             </div>

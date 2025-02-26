@@ -97,7 +97,7 @@ const RecentChats = ({ recentChats, isSidebarOpen, setIsSidebarOpen }) => {
                       </div>
                       <div className="flex items-center justify-between mt-1">
                         <p className="text-sm text-gray-400 truncate">
-                          {chat?.messages[0]?.question || "Your messages!"}
+                          {chat?.messages[0]?.question || "No recent messages!"}
                         </p>
                         <span className="text-xs text-gray-500">
                           {chat?.messages.length}{" "}

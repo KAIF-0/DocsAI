@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import {
   Send,
   ArrowLeft,
@@ -33,16 +33,24 @@ import { useMutation } from "@tanstack/react-query";
 import { getResponse } from "@/app/helpers/chatHelper";
 import { useAuthStore } from "@/app/stores/authStore";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm"; // Enables GitHub Flavored Markdown (tables, strikethrough, etc.)
-import rehypeHighlight from "rehype-highlight"; // Syntax highlighting for code blocks
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github.css";
+import { useParams } from "next/navigation";
+import toast from "react-hot-toast";
+import Toast from "../toast";
 
-const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
-  const [messages, setMessages] = useState(messageArray);
+const ChatInterface = ({
+  url,
+  title,
+  isSidebarOpen,
+  messages: messagesArray = [],
+}) => {
+  const [messages, setMessages] = useState(null);
   const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
   const [showCommands, setShowCommands] = useState(false);
   const { userId } = useAuthStore();
+  const { chatId = null } = useParams();
   const chat_mutation = useMutation({
     mutationFn: getResponse,
     onSuccess: (res) => {
@@ -52,36 +60,46 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
     onError: (err) => {
       console.log("Error mutating:", err.message);
     },
+    onSettled: () => {
+      setInput("");
+      scrollToBottom();
+    },
   });
+
+  useEffect(() => {
+    setMessages(messagesArray);
+  }, [messagesArray]);
 
   const messagesEndRef = useRef(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-    setInput("");
+    if (!chatId) {
+      toast.custom(
+        <Toast type="warning" message="Please start a documentation first!" />,
+        {
+          position: "bottom-right",
+        }
+      );
+      return;
+    }
 
     chat_mutation.mutate({
-      chatId: "29d0e8e4-90e3-44e5-b467-ec4bd335468f",
+      url: url,
+      key: title,
+      chatId: chatId,
       question: input,
       userId,
     });
   };
 
-  const handleReaction = (messageId) => {
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === messageId
-          ? { ...msg, reactions: (msg.reactions || 0) + 1 }
-          : msg
-      )
-    );
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const simulateTyping = async () => {
-    setIsTyping(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsTyping(false);
-  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const formatMessage = (content) => {
     return content
@@ -92,17 +110,17 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
   return (
     <div className="mx-auto">
       <div
-        className={`flex-1 transition-all duration-300 ${
+        className={`flex-1 transition-all duration-300 space-y-3 ${
           isSidebarOpen ? "ml-80" : "ml-0"
-        }`}
+        } ${isSidebarOpen ? "hidden md:block" : ""}`}
       >
         {/* Header */}
         <div
-          className={`fixed mx-auto top-16 left-0 right-0  z-10 ${
+          className={`fixed mx-auto left-0 right-0 z-10 ${
             isSidebarOpen ? "ml-80" : "ml-0"
           }`}
         >
-          <div className="px-4 sm:px-6 lg:px-8 py-4 transition-all rounded-xl bg-gray-900/30 backdrop-blur-3xl m-5 duration-300">
+          <div className="px-4 sm:px-6 lg:px-8 py-4 transition-all rounded-xl bg-gray-900/30 backdrop-blur-3xl mx-5 duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <Link
@@ -113,13 +131,18 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
                 </Link>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-                    <Brain className="h-6 w-6 text-blue-400" />
+                    <span>
+                      <Brain className="h-6 w-6 text-blue-400" />
+                    </span>
                   </div>
                   <div>
                     <h1 className="text-xl font-semibold text-white">
-                      Documentation Assistant
+                      {title.charAt(0).toUpperCase() + title.slice(1)}{" "}
+                      Documentation
                     </h1>
-                    <p className="text-sm text-gray-400">Always here to help</p>
+                    <p className="text-sm text-gray-400">
+                      URL : {url.length > 0 ? url : "Not Available!"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -134,13 +157,13 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
         </div>
 
         {/* Chat Messages */}
-        <div className="min-w-[60%] mx-auto px-4 sm:px-6 lg:px-8 pb-24 my-28 overflow-y-auto">
-          <div className="space-y-3 pt-8">
-            {messages && messages?.length ? (
+        <div className="min-w-[60%] mx-auto px-4 lg:px-8 sm:px-6 md:max-h-[560px] max-h-[750px] overflow-y-auto overflow-hidden">
+          <div className="space-y-4 pt-5 md:mt-20 mt-24">
+            {messages && messages?.length > 0 ? (
               messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex items-start justify-center space-x-3 `}
+                  className={`flex items-start justify-center space-x-3`}
                 >
                   {/* Avatar
                   <div
@@ -158,9 +181,26 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
                   </div> */}
 
                   {/* Message Content */}
-                  <div className="flex-1 max-w-4xl">
-                    <div className=" space-y-5">
+                  <div className="flex-1 max-w-4xl ">
+                    <div className="space-y-5">
                       <div className="flex gap-2 justify-self-end">
+                        <button
+                          className="p-1 hover:text-white text-gray-400 transition-colors"
+                          onClick={() => {
+                            navigator.clipboard.writeText(message.question);
+                            toast.custom(
+                              <Toast
+                                type="success"
+                                message="Question copied to clipboard!"
+                              />,
+                              {
+                                position: "bottom-right",
+                              }
+                            );
+                          }}
+                        >
+                          <CopyIcon />
+                        </button>
                         <div className="bg-blue-500 text-white p-3 rounded-lg">
                           {formatMessage(message.question)}
                         </div>
@@ -207,8 +247,22 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
                         </div>
 
                         {/* Copy Button */}
-                        <button className="p-1 hover:text-white text-gray-400 transition-colors">
-                          <CopyIcon className="h-4 w-4" />
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(message.response);
+                            toast.custom(
+                              <Toast
+                                type="success"
+                                message="Response copied to clipboard!"
+                              />,
+                              {
+                                position: "bottom-right",
+                              }
+                            );
+                          }}
+                          className="p-1 hover:text-white text-gray-400 transition-colors"
+                        >
+                          <CopyIcon />
                         </button>
                       </div>
                     </div>
@@ -216,7 +270,7 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
                 </div>
               ))
             ) : (
-              <div className="flex-col text-center items-center justify-center p-4 mt-24 md:mt-24">
+              <div className="flex-col text-center items-center justify-center p-4 mt-48 md:mt-32">
                 <div className="flex justify-center items-center gap-2 mb-1">
                   <Brain className="h-12 w-12 text-blue-500" />
                   <h2 className="text-xl font-semibold text-white">
@@ -228,10 +282,28 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
                 </p>
               </div>
             )}
+            {chat_mutation.isError && (
+              //   <div className="flex justify-center items-center p-4 mt-4 bg-red-500 text-white rounded-md">
+              //     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+              //       <Bot className="h-6 w-6 text-blue-400" />
+              //     </div>
+              //     <p>Failed to get response!</p>
+              //   </div>
+              <div className=" min-w-full justify-center flex items-start  space-x-3">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                  <Bot className="h-6 w-6 text-red-400" />
+                </div>
+                <div className="bg-red-500 rounded-2xl px-4 py-2">
+                  <div className="flex items-center space-x-2">
+                    <p>Failed to get response!</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Typing Indicator */}
             {chat_mutation.isPending && (
-              <div className="min-w-[60%] flex items-start self-center space-x-3">
+              <div className=" min-w-full justify-center flex items-start  space-x-3">
                 <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
                   <Bot className="h-6 w-6 text-blue-400" />
                 </div>
@@ -250,7 +322,7 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
 
         {/* Input Form */}
         <div
-          className={`absolute rounded-xl bottom-0 left-0 right-0 bg-gray-900/30 backdrop-blur-3xl border-t border-gray-800 ${
+          className={`fixed rounded-xl bottom-0 left-0 right-0 bg-gray-900/30 backdrop-blur-3xl border-t border-gray-800 ${
             isSidebarOpen ? "ml-80" : "ml-0"
           }`}
         >
@@ -314,4 +386,4 @@ const ChatInterface = ({ isSidebarOpen, messages: messageArray }) => {
   );
 };
 
-export default ChatInterface;
+export default memo(ChatInterface);

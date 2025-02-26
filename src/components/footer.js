@@ -1,4 +1,6 @@
+"use client";
 import { Github, Linkedin, Twitter } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
   const info = [
@@ -18,8 +20,9 @@ export default function Footer() {
       icon: <Twitter />,
     },
   ];
+  const path = usePathname();
 
-  return (
+  return path.startsWith("/chat") ? null : (
     <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container py-12 mx-auto px-4 md:py-16">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 text-center ">
@@ -53,33 +56,6 @@ export default function Footer() {
                   </a>
                 </li>
               ))}
-              {/* <li>
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  className="hover:text-primary"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  className="hover:text-primary"
-                >
-                  Twitter
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  className="hover:text-primary"
-                >
-                  LinkedIn
-                </a>
-              </li> */}
             </ul>
           </div>
         </div>

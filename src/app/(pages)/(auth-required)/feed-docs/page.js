@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Toast from "@/components/toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/app/stores/authStore";
 import { createChat } from "@/app/helpers/chatHelper";
 
@@ -27,6 +27,7 @@ const SiteInsertion = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const { userId } = useAuthStore();
+  const queryClient = useQueryClient();
 
   const steps = [
     {
@@ -66,6 +67,7 @@ const SiteInsertion = () => {
       console.log("Success mutating:", res);
       setChatId(res?.chat.id);
       setIsComplete(true);
+      queryClient.invalidateQueries(["userChats", userId]);
     },
     onError: (err) => {
       console.log("Error mutating:", err.message);
@@ -85,11 +87,11 @@ const SiteInsertion = () => {
     e.preventDefault();
 
     // checking if url contains /docs endpoint
-    if (!url.includes("/docs")) {
+    if (!url.includes("docs")) {
       toast.custom(
         <Toast
           type="warning"
-          message="Please enter a valid documentation URL that should contain '/docs' endpoint!"
+          message="Please enter a valid documentation URL!"
         />,
         {
           position: "bottom-right",

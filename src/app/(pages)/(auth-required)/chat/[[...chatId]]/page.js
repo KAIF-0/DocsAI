@@ -32,6 +32,9 @@ import { useAuthStore } from "@/app/stores/authStore";
 import { getUserChats } from "@/app/helpers/chatHelper";
 import { useQuery } from "@tanstack/react-query";
 import LoadingPage from "@/app/(pages)/loading";
+import toast from "react-hot-toast";
+import Toast from "@/components/toast";
+import { useParams, useRouter } from "next/navigation";
 
 // interface Message {
 //   id: number;
@@ -58,39 +61,38 @@ const ChatRoom = () => {
     staleTime: 10 * 60 * 1000,
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [chatDetails, setChatDetails] = useState({
+    url: "",
+    title: "",
+    messages: null,
+  });
+  const router = useRouter();
+  const { chatId = null } = useParams();
+
+  // console.log(chatId);
+
+  useEffect(() => {
+    if (isLoading || !chatId || !data) return;
+
+    const chat = data?.chats.find((chat) => chatId[0] === chat.id);
+    if (chat) {
+      console.log(chat);
+      setChatDetails((prev) => ({
+        ...prev,
+        url: chat.url,
+        title: chat.key,
+        messages: chat.messages,
+      }));
+    } else {
+      toast.custom(<Toast type="error" message={"Chat not found!"} />);
+      router.push("/chat");
+    }
+  }, [isLoading, data, chatId, router]);
 
   if (isLoading) return <LoadingPage />;
-  console.log(data);
-  const recentChats = [
-    {
-      id: 1,
-      title: "React Hooks Documentation",
-      lastMessage: "Can you explain useEffect dependencies?",
-      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-      unread: true,
-    },
-    {
-      id: 2,
-      title: "TypeScript Types",
-      lastMessage: "What's the difference between type and interface?",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60), // 1 hour ago
-    },
-    {
-      id: 3,
-      title: "Node.js Event Loop",
-      lastMessage: "How does the event loop work in Node.js?",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-    },
-    {
-      id: 4,
-      title: "Redux State Management",
-      lastMessage: "Best practices for organizing Redux store",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-    },
-  ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-fit">
       {/* Recent Chats Sidebar */}
       <RecentChats
         recentChats={data?.chats}
@@ -100,7 +102,9 @@ const ChatRoom = () => {
 
       {/* Main Chat Area */}
       <ChatInterface
-        messages={data?.chats[2]?.messages}
+        url={chatDetails.url}
+        title={chatDetails.title}
+        messages={chatDetails.messages}
         isSidebarOpen={isSidebarOpen}
       />
     </div>
