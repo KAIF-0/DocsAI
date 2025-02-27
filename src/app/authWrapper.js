@@ -23,7 +23,7 @@ const AuthWrapper = ({ children }) => {
     // } else {
     //   setSessionLoading(false);
     // }
-  }, [cleanStore, isSessionPresent]);
+  }, []);
 
   //loading session first
   if (sessionLoading) {
