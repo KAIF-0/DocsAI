@@ -3,38 +3,47 @@ import { env } from "@/env";
 import { cookies } from "next/headers";
 
 export async function middleware(request) {
-  // const pathname = request.nextUrl.pathname;
-  // const sessionToken = await request.cookies.get("sessionToken")?.value;
-  // const subscriptionToken = await request.cookies.get("subToken")?.value;
-  // // console.log(sessionToken);
+  const pathname = request.nextUrl.pathname;
+  const sessionToken = await request.cookies.get("sessionToken")?.value;
+  const subscriptionToken = await request.cookies.get("subToken")?.value;
+  // console.log(sessionToken);
 
-  // const authProtectedRoutes = ["/chat", "/dashboard", "/feed-docs", "/plan"];
+  const authProtectedRoutes = ["/chat", "/dashboard", "/feed-docs", "/plan"];
 
-  // //auth middleware
-  // if (authProtectedRoutes.some((route) => pathname.startsWith(route))) {
-  //   if (!sessionToken) {
-  //     console.log("No session token found. Redirecting to Sign-In page");
-  //     return NextResponse.redirect(new URL("/auth/signin", request.url));
-  //   }
-  // }
+  //auth middleware
+  if (authProtectedRoutes.some((route) => pathname.startsWith(route))) {
+    if (!sessionToken) {
+      console.log("No session token found. Redirecting to Sign-In page");
+      return NextResponse.redirect(new URL("/auth/signin", request.url));
+    }
+  }
 
-  // //if user is already logged in so protecting auth routes
-  // const loggedInProtectedRoutes = ["/auth"];
-  // if (loggedInProtectedRoutes.some((route) => pathname.startsWith(route))) {
-  //   if (sessionToken) {
-  //     console.log("User already logged in! Redirecting to Dashboard...");
-  //     return NextResponse.redirect(new URL("/dashboard", request.url));
-  //   }
-  // }
+  //if user is already logged in so protecting auth routes
+  const loggedInProtectedRoutes = ["/auth"];
+  if (loggedInProtectedRoutes.some((route) => pathname.startsWith(route))) {
+    if (sessionToken) {
+      console.log("User already logged in! Redirecting to Dashboard...");
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
 
-  // if (pathname === "/plan/details") {
-  //   if (!subscriptionToken) {
-  //     console.log(
-  //       "No subscription token found. Redirecting to subscription plans page!"
-  //     );
-  //     return NextResponse.redirect(new URL("/pricing", request.url));
-  //   }
-  // }
+  if (pathname === "/plan/details") {
+    if (!subscriptionToken) {
+      console.log(
+        "No subscription token found. Redirecting to subscription plans page!"
+      );
+      return NextResponse.redirect(new URL("/pricing", request.url));
+    }
+  }
+
+  if (pathname === "/plan/confirmation") {
+    if (subscriptionToken) {
+      console.log(
+        "Already have subscription, redirecting to subscription plans page!"
+      );
+      return NextResponse.redirect(new URL("/plan/details", request.url));
+    }
+  }
   return NextResponse.next();
 }
 

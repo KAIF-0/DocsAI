@@ -1,8 +1,10 @@
+import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 import { Check, X } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 const PricingCard = ({ plans, isAnnual }) => {
+  const { ispX01 } = useSubscriptionStore();
   return (
     <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
       {plans.map((plan) => (
@@ -23,11 +25,17 @@ const PricingCard = ({ plans, isAnnual }) => {
               href={
                 plan.price === 0
                   ? "/feed-docs"
+                  : ispX01
+                  ? "/plan/details"
                   : `/plan/confirmation?plan=pro&isAnnual=${isAnnual}`
               }
               className="block w-full py-3 px-6 rounded-lg text-center font-semibold transition-all duration-200 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white mb-8"
             >
-              {plan.price === 0 ? "Get Started" : "Upgrade Now"}
+              {plan.price === 0
+                ? "Get Started"
+                : ispX01
+                ? "Commence Your Subscription"
+                : "Upgrade Now"}
             </Link>
           </div>
 

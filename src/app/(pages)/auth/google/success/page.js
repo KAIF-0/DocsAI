@@ -21,7 +21,7 @@ const GoogleSignInSuccess = () => {
         }, 10000);
       } else {
         console.log("Google Login Error: ", response.message);
-        router.push("/");
+        router.push("/auth/google/failure");
       }
     });
   }, [googleLogin, router]);

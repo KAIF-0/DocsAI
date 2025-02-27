@@ -76,7 +76,7 @@ const ChatRoom = () => {
 
     const chat = data?.chats.find((chat) => chatId[0] === chat.id);
     if (chat) {
-      console.log(chat);
+      // console.log(chat);
       setChatDetails((prev) => ({
         ...prev,
         url: chat.url,

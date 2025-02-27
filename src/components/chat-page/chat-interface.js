@@ -25,11 +25,12 @@ import {
   MessageSquareCodeIcon,
   Share2Icon,
   CopyIcon,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
 import { env } from "@/env";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getResponse } from "@/app/helpers/chatHelper";
 import { useAuthStore } from "@/app/stores/authStore";
 import ReactMarkdown from "react-markdown";
@@ -39,6 +40,8 @@ import "highlight.js/styles/github.css";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import Toast from "../toast";
+import { useMessageStore } from "@/app/stores/messageStore";
+import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 
 const ChatInterface = ({
   url,
@@ -46,16 +49,24 @@ const ChatInterface = ({
   isSidebarOpen,
   messages: messagesArray = [],
 }) => {
+  const queryClient = useQueryClient();
   const [messages, setMessages] = useState(null);
   const [input, setInput] = useState("");
   const [showCommands, setShowCommands] = useState(false);
   const { userId } = useAuthStore();
   const { chatId = null } = useParams();
+  const { ispX01 } = useSubscriptionStore();
+  const { msgCount, increaseMsgCount } = useMessageStore();
+  const [showMessagesLeft, setShowMessagesLeft] = useState(true);
   const chat_mutation = useMutation({
     mutationFn: getResponse,
     onSuccess: (res) => {
       console.log("Success mutating:", res);
       setMessages((prev) => [...prev, res.chatMessage]);
+      queryClient.invalidateQueries(["userChats", userId]);
+
+      //increase message count in message store
+      increaseMsgCount();
     },
     onError: (err) => {
       console.log("Error mutating:", err.message);
@@ -77,6 +88,20 @@ const ChatInterface = ({
     if (!chatId) {
       toast.custom(
         <Toast type="warning" message="Please start a documentation first!" />,
+        {
+          position: "bottom-right",
+        }
+      );
+      return;
+    }
+
+    //check for pro subscription
+    if (!ispX01 && msgCount >= 5) {
+      toast.custom(
+        <Toast
+          type="warning"
+          message="You have reached the message limit. Upgrade to Pro to send more messages!"
+        />,
         {
           position: "bottom-right",
         }
@@ -321,11 +346,23 @@ const ChatInterface = ({
         </div>
 
         {/* Input Form */}
+
         <div
           className={`fixed rounded-xl bottom-0 left-0 right-0 bg-gray-900/30 backdrop-blur-3xl border-t border-gray-800 ${
             isSidebarOpen ? "ml-80" : "ml-0"
           }`}
         >
+          {!ispX01 && showMessagesLeft && (
+            <div className="relative px-5 flex justify-between items-center top-0 left-0 right-0 border-b-[1px] border-white p-2 text-white text-center">
+              <p>You have now {5 - msgCount} messages left! </p>
+              <button
+                onClick={() => setShowMessagesLeft(false)}
+                className=" text-gray-400 hover:text-white"
+              >
+                <X className="size-6" />{" "}
+              </button>
+            </div>
+          )}
           <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4 transition-all duration-300">
             <form onSubmit={handleSubmit} className="relative">
               <div className="flex items-center space-x-2">

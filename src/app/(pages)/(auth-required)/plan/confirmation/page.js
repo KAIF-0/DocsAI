@@ -10,6 +10,8 @@ import paymentGateway from "@/app/helpers/subscription/paymentGateway";
 import PricingToggle from "@/components/pricing/pricingToggle";
 import { useAuthStore } from "@/app/stores/authStore";
 import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
+import toast from "react-hot-toast";
+import Toast from "@/components/toast";
 const Page = () => {
   const [isAnnual, setIsAnnual] = useState(
     useSearchParams().get("isAnnual") === "true" ? true : false || false
@@ -17,7 +19,7 @@ const Page = () => {
   const [formData, setFormData] = useState(null);
   const router = useRouter();
   const { userId } = useAuthStore();
-  const { createOrder, addSubscription } = useSubscriptionStore();
+  const { createOrder, addSubscription, ispX01 } = useSubscriptionStore();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const submitForm = async (data) => {
@@ -66,11 +68,27 @@ const Page = () => {
     },
     onError: (err) => {
       console.log("Error mutating:", err.message);
+      toast.custom(
+        <Toast type="error" message="Failed to process payment!" />,
+        {
+          position: "bottom-right",
+        }
+      );
     },
   });
 
   const handlePurchase = () => {
-    console.log({ ...formData, amount: isAnnual ? "24.0" : "5.0" });
+    if (ispX01) {
+      toast.custom(
+        <Toast type="info" message="You Already have a pro subscription!" />,
+        {
+          position: "bottom-right",
+        }
+      );
+      return;
+    }
+
+    // console.log({ ...formData, amount: isAnnual ? "24.0" : "5.0" });
     subcription_mutation.mutate({
       ...formData,
       userId: userId,

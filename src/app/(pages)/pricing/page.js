@@ -15,16 +15,12 @@ const Pricing = () => {
       description: "Perfect for trying out DocsAI",
       price: 0,
       features: [
-        "10 documentation chats per month",
-        "1 documentation site",
+        "5 documentation chats per day",
+        "1 documentation site per day",
         "Basic AI responses",
         "Community support",
       ],
-      limitations: [
-        "Limited chat history",
-        "No custom AI training",
-        "No team collaboration",
-      ],
+      limitations: ["Limited chat history", "No team collaboration"],
     },
     {
       name: "Pro",
@@ -35,9 +31,7 @@ const Pricing = () => {
         "Unlimited documentation sites",
         "Advanced AI responses",
         "Priority support",
-        "Custom AI training",
         "Team collaboration",
-        "API access",
         "Analytics dashboard",
       ],
       limitations: [],
@@ -80,7 +74,7 @@ const Pricing = () => {
           {/* Pricing Toggle */}
           <PricingToggle isAnnual={isAnnual} setIsAnnual={setIsAnnual} />
           {/* Pricing Cards */}
-          <PricingCard plans={plans} isAnnual={isAnnual}/>
+          <PricingCard plans={plans} isAnnual={isAnnual} />
           {/* FAQ Section */}
           <div className="mt-20">
             <h2 className="text-3xl font-bold text-white mb-8">

@@ -18,6 +18,8 @@ import Toast from "@/components/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/app/stores/authStore";
 import { createChat } from "@/app/helpers/chatHelper";
+import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
+import { useMessageStore } from "@/app/stores/messageStore";
 
 const SiteInsertion = () => {
   const [url, setUrl] = useState("");
@@ -28,6 +30,8 @@ const SiteInsertion = () => {
   const [isComplete, setIsComplete] = useState(false);
   const { userId } = useAuthStore();
   const queryClient = useQueryClient();
+  const { ispX01 } = useSubscriptionStore();
+  const { siteCount, increaseSiteCount } = useMessageStore();
 
   const steps = [
     {
@@ -68,6 +72,9 @@ const SiteInsertion = () => {
       setChatId(res?.chat.id);
       setIsComplete(true);
       queryClient.invalidateQueries(["userChats", userId]);
+
+      //incraese site integration count
+      increaseSiteCount();
     },
     onError: (err) => {
       console.log("Error mutating:", err.message);
@@ -86,6 +93,19 @@ const SiteInsertion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!ispX01 && siteCount >= 1) {
+      toast.custom(
+        <Toast
+          type="warning"
+          message="You have reached the site integration limit. Upgrade to Pro for more integrations!"
+        />,
+        {
+          position: "bottom-right",
+        }
+      );
+      return;
+    }
+
     // checking if url contains /docs endpoint
     if (!url.includes("docs")) {
       toast.custom(
@@ -99,6 +119,7 @@ const SiteInsertion = () => {
       );
       return;
     }
+
     setIsLoading(true);
 
     const loadingInterval = setInterval(async () => {
