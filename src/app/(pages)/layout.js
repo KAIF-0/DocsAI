@@ -3,6 +3,7 @@ import { Suspense, useEffect } from "react";
 import LoadingPage from "./loading";
 import AuthWrapper from "../authWrapper";
 import { Toaster } from "react-hot-toast";
+import { useMessageStore } from "../stores/messageStore";
 
 // export const metadata = {
 //   title: "DocsAI",
@@ -10,9 +11,17 @@ import { Toaster } from "react-hot-toast";
 // };
 
 export default function RootLayout({ children }) {
+  const { checkAndRefresh } = useMessageStore();
   useEffect(() => {
-    console.log("useEffect");
-  }, []);
+    checkAndRefresh();
+
+    //check every minute 
+    const interval = setInterval(() => {
+      checkAndRefresh(); 
+    }, 60 * 1000); 
+
+    return () => clearInterval(interval);
+  }, [checkAndRefresh]);
 
   return (
     <div>

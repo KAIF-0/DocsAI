@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 export const useMessageStore = create(
   persist(
-    immer((set) => ({
+    immer((set, get) => ({
       msgCount: 0,
       siteCount: 0,
 
@@ -19,16 +19,36 @@ export const useMessageStore = create(
 
       increaseMsgCount: () =>
         set((state) => ({ msgCount: state.msgCount + 1 })),
-      
+
       increaseSiteCount: () =>
         set((state) => ({ siteCount: state.siteCount + 1 })),
 
-      refreshStore: async () => {
+      refreshStore: () => {
         console.log("Cleaning Message Store!");
         set({
           msgCount: 0,
           siteCount: 0,
         });
+
+
+        //saving lastRefresh time to localStorage
+        localStorage.setItem("_lastRefresh", new Date().toISOString());
+      },
+
+      checkAndRefresh: () => {
+        const lastRefresh = localStorage.getItem("_lastRefresh");
+        const now = new Date();
+        const lastRefreshDate = lastRefresh ? new Date(lastRefresh) : null;
+
+        console.log(lastRefreshDate);
+
+        if (
+          !lastRefreshDate ||
+          lastRefreshDate.toDateString() !== now.toDateString()
+        ) {
+          console.log("Refreshing message store!");
+          get().refreshStore();
+        }
       },
 
       setHydrated() {
