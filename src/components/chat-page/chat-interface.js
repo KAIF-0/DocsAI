@@ -26,6 +26,8 @@ import {
   Share2Icon,
   CopyIcon,
   X,
+  LoaderCircleIcon,
+  Loader,
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
@@ -409,10 +411,14 @@ const ChatInterface = ({
 
                 <button
                   type="submit"
-                  className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={!input.trim()}
+                  className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-800"
+                  disabled={!input.trim() || chat_mutation.isPending}
                 >
-                  <Send className="h-5 w-5" />
+                  {chat_mutation.isPending ? (
+                    <Loader className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <Send className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             </form>

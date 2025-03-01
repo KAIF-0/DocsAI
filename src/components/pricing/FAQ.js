@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 const FAQ = ({ faqs }) => {
   return (
@@ -15,4 +15,4 @@ const FAQ = ({ faqs }) => {
   );
 };
 
-export default FAQ;
+export default memo(FAQ);

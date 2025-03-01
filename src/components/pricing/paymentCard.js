@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 
 import {
   ChevronDown,
@@ -211,4 +211,4 @@ const PaymentCard = ({
   );
 };
 
-export default PaymentCard;
+export default memo(PaymentCard);

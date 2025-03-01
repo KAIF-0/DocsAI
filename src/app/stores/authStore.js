@@ -267,7 +267,15 @@ export const useAuthStore = create(
       name: "_user/data",
       onRehydrateStorage() {
         return (state, error) => {
-          if (!error) state?.setHydrated();
+          if (!error) {
+            state
+              ?.getSessionInfo() //checking appwrite auth session
+              .then(async (sessionPresent) => {
+                if (!sessionPresent?.success) await state?.cleanStore(); //cleaning store if session is not present
+                console.log("Session present!");
+              });
+            state?.setHydrated();
+          }
         };
       },
     }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { useAuthStore } from "@/app/stores/authStore";
 import { useSubscriptionStore } from "./stores/subscriptionStore";
 
@@ -15,4 +15,4 @@ const SubscriptionWrapper = () => {
   return null;
 };
 
-export default SubscriptionWrapper;
+export default memo(SubscriptionWrapper);

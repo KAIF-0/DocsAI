@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, useEffect } from "react";
 import LoadingPage from "./loading";
-import AuthWrapper from "../authWrapper";
+import AuthWrapper from "../messageWrapper";
 import { Toaster } from "react-hot-toast";
 import { useMessageStore } from "../stores/messageStore";
 
@@ -11,17 +11,9 @@ import { useMessageStore } from "../stores/messageStore";
 // };
 
 export default function RootLayout({ children }) {
-  const { checkAndRefresh } = useMessageStore();
   useEffect(() => {
-    checkAndRefresh();
-
-    //check every minute 
-    const interval = setInterval(() => {
-      checkAndRefresh(); 
-    }, 60 * 1000); 
-
-    return () => clearInterval(interval);
-  }, [checkAndRefresh]);
+    console.log("Root Layout!");
+  }, []);
 
   return (
     <div>

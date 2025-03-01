@@ -6,7 +6,7 @@ import Footer from "@/components/footer";
 import { Suspense } from "react";
 import LoadingOverlay from "./loading";
 import InitialLoadingPage from "./loading";
-import AuthWrapper from "./authWrapper";
+import MessageWrapper from "./messageWrapper";
 import QueryProvider from "./QueryProvider";
 import SubscriptionWrapper from "./subscriptionWrapper";
 
@@ -34,18 +34,17 @@ export default function RootLayout({ children }) {
         <Suspense fallback={<InitialLoadingPage />}>
           <QueryProvider>
             <SubscriptionWrapper />
-            <AuthWrapper>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="dark"
-                enableSystem
-                disableTransitionOnChange
-              >
-                <Header />
-                <main>{children}</main>
-                <Footer />
-              </ThemeProvider>
-            </AuthWrapper>
+            <MessageWrapper />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </ThemeProvider>
           </QueryProvider>
         </Suspense>
       </body>

@@ -1,7 +1,7 @@
 import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 import { Check, X } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { memo } from "react";
 
 const PricingCard = ({ plans, isAnnual }) => {
   const { ispX01 } = useSubscriptionStore();
@@ -74,4 +74,4 @@ const PricingCard = ({ plans, isAnnual }) => {
   );
 };
 
-export default PricingCard;
+export default memo(PricingCard);

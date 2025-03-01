@@ -24,7 +24,7 @@ export const useMessageStore = create(
         set((state) => ({ siteCount: state.siteCount + 1 })),
 
       refreshStore: () => {
-        console.log("Cleaning Message Store!");
+        console.log("Cleaning Message Store...");
         set({
           msgCount: 0,
           siteCount: 0,
@@ -59,6 +59,7 @@ export const useMessageStore = create(
       name: "_user/msg",
       onRehydrateStorage() {
         return (state, error) => {
+          // console.log(state)
           if (!error) state?.setHydrated();
         };
       },

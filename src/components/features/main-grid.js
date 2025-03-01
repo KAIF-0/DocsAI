@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 const FeaturesGrid = ({ features }) => {
   return (
@@ -19,4 +19,4 @@ const FeaturesGrid = ({ features }) => {
   );
 };
 
-export default FeaturesGrid;
+export default memo(FeaturesGrid);

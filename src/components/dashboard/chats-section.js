@@ -10,7 +10,7 @@ import {
   Search,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useMemo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getUserChats } from "@/app/helpers/chatHelper";
 import { useRouter } from "next/navigation";
@@ -208,4 +208,4 @@ const Chats = () => {
   );
 };
 
-export default Chats;
+export default memo(Chats);

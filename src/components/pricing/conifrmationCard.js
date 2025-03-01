@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import {
   ChevronDown,
@@ -75,4 +75,4 @@ const ConifrmationCard = ({
   );
 };
 
-export default ConifrmationCard;
+export default memo(ConifrmationCard);

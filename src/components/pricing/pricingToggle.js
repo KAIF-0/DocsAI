@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 const PricingToggle = ({ setIsAnnual, isAnnual }) => {
   return (
@@ -23,4 +23,4 @@ const PricingToggle = ({ setIsAnnual, isAnnual }) => {
   );
 };
 
-export default PricingToggle;
+export default memo(PricingToggle);
