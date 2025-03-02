@@ -131,7 +131,7 @@ const SiteInsertion = () => {
         }
         return prev + 1;
       });
-    }, 2000);
+    }, 20000);
 
     try {
       await docs_mutation.mutateAsync({
@@ -145,6 +145,7 @@ const SiteInsertion = () => {
     } finally {
       clearInterval(loadingInterval);
       setIsLoading(false);
+      setCurrentStep(0);
     }
   };
 
