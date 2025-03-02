@@ -134,7 +134,7 @@ const SiteInsertion = () => {
     }, 2000);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 8000));
+      await new Promise((resolve) => setTimeout(resolve, 40000));
       await docs_mutation.mutateAsync({
         userId,
         url,
