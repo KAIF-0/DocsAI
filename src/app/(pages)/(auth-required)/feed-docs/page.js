@@ -107,7 +107,7 @@ const SiteInsertion = () => {
     }
 
     // checking if url contains /docs endpoint
-    if (!url.includes("docs") || url.includes("documentation")) {
+    if (!url.includes("doc")) {
       toast.custom(
         <Toast
           type="warning"

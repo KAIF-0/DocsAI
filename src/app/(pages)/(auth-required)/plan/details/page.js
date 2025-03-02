@@ -37,7 +37,7 @@ const SubscriptionDetails = () => {
   if (isLoading) return <LoadingPage />;
   if (isSuccess) {
     console.log("Successfully loaded subscription");
-    subscription = data.subscriptionDetails;
+    subscription = data.subscriptionDetails; 
   }
 
   return (
