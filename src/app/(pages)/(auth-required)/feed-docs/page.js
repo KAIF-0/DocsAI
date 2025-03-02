@@ -131,9 +131,10 @@ const SiteInsertion = () => {
         }
         return prev + 1;
       });
-    }, 20000);
+    }, 2000);
 
     try {
+      await new Promise((resolve) => setTimeout(resolve, 8000));
       await docs_mutation.mutateAsync({
         userId,
         url,
