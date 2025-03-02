@@ -67,15 +67,17 @@ const SiteInsertion = () => {
   ];
   const docs_mutation = useMutation({
     mutationFn: createChat,
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       console.log("Success mutating:", res);
       setChatId(res?.chat.id);
-      setIsComplete(true);
-      queryClient.invalidateQueries(["userChats", userId]);
+      await queryClient.invalidateQueries(["userChats", userId]);
 
       //incraese site integration count
-      increaseSiteCount();
+      await increaseSiteCount();
+
+      setIsComplete(true);
     },
+
     onError: (err) => {
       console.log("Error mutating:", err.message);
       toast.custom(
