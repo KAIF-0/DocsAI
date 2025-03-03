@@ -99,9 +99,13 @@ const RecentChats = ({ recentChats, isSidebarOpen, setIsSidebarOpen }) => {
                         <p className="text-sm text-gray-400 truncate">
                           {chat?.messages[0]?.question || "No recent messages!"}
                         </p>
-                        <span className="text-xs text-gray-500">
-                          {chat?.messages.length}{" "}
-                          {chat?.messages.length === 1 ? "message" : "messages"}
+                        <span className="text-xs text-gray-500 ml-1 flex gap-1">
+                          <span>{chat?.messages.length || 0} </span>
+                          <span>
+                            {chat?.messages.length === 1
+                              ? "message"
+                              : "messages"}
+                          </span>
                         </span>
                       </div>
                     </div>

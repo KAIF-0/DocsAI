@@ -9,6 +9,7 @@ import InitialLoadingPage from "./loading";
 import MessageWrapper from "./messageWrapper";
 import QueryProvider from "./QueryProvider";
 import SubscriptionWrapper from "./subscriptionWrapper";
+import { Poppins } from "next/font/google";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -20,7 +21,7 @@ import SubscriptionWrapper from "./subscriptionWrapper";
 //   subsets: ["latin"],
 // });
 
-// const poppins = Poppins({ subsets: ["latin"], weight: "200" });
+const poppins = Poppins({ subsets: ["latin"], weight: "200" });
 
 export const metadata = {
   title: "DocsAI",
@@ -30,7 +31,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={``}>
+      <body className={`${poppins.className}`}>
         <Suspense fallback={<InitialLoadingPage />}>
           <QueryProvider>
             <SubscriptionWrapper />
