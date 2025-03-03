@@ -65,7 +65,11 @@ const ChatInterface = ({
     onSuccess: (res) => {
       console.log("Success mutating:", res);
       setMessages((prev) => [...prev, res.chatMessage]);
-      queryClient.invalidateQueries(["userChats", userId]);
+      queryClient.invalidateQueries([
+        "userChats",
+        "dashboardUserChats",
+        userId,
+      ]);
 
       //increase message count in message store
       increaseMsgCount();

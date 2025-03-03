@@ -70,7 +70,11 @@ const SiteInsertion = () => {
     onSuccess: async (res) => {
       console.log("Success mutating:", res);
       setChatId(res?.chat.id);
-      await queryClient.invalidateQueries(["userChats", userId]);
+      await queryClient.invalidateQueries([
+        "userChats",
+        "dashboardUserChats",
+        userId,
+      ]);
 
       //incraese site integration count
       await increaseSiteCount();
@@ -186,7 +190,7 @@ const SiteInsertion = () => {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   className="block w-full px-4 py-2 border border-gray-700 rounded-lg bg-gray-900/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://docs.example.com"
+                  placeholder="https://docs.example.com/docs"
                 />
               </div>
               <p className="mt-2 text-sm text-gray-400">
@@ -240,7 +244,9 @@ const SiteInsertion = () => {
             {isComplete && (
               <div className="mt-6 md:flex gap-6 p-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border rounded-xl space-y-4">
                 <div className="flex items-center space-x-4">
-                  <CheckCircle className="h-8 w-8" />
+                  <sapn>
+                    <CheckCircle className="h-8 w-8" />
+                  </sapn>
                   <div>
                     <h3 className="text-lg font-semibold">Success!</h3>
                     <p className="text-sm">
@@ -251,7 +257,7 @@ const SiteInsertion = () => {
                 </div>
                 <Link
                   href={`/chat/${chatId}`}
-                  className="max-w-fit mx-auto flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-[1.02]"
+                  className="min-w-fit mx-auto flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-[1.02]"
                 >
                   Start with Your Docs
                 </Link>
