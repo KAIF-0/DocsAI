@@ -69,7 +69,7 @@ const ChatRoom = () => {
   const router = useRouter();
   const { chatId = null } = useParams();
 
-  // console.log(chatId);
+  console.log(isLoading, !isSuccess);
 
   useEffect(() => {
     if (isLoading || !chatId || !data) return;
@@ -89,7 +89,7 @@ const ChatRoom = () => {
     }
   }, [isLoading, data, chatId, router]);
 
-  if (isLoading && isFetching) return <LoadingPage />;
+  if (isLoading && !isSuccess) return <LoadingPage />;
 
   return (
     <div className="min-h-fit">
