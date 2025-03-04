@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <div>
-      <Suspense fallback={<LoadingPage />}>
+      {/* <Suspense fallback={<LoadingPage />}> */}
         <Script
           src="https://cdn.lordicon.com/lordicon.js"
           strategy="afterInteractive"
@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
         {/* <Header /> */}
         <main>{children}</main>
         {/* <Footer /> */}
-      </Suspense>
+      {/* </Suspense> */}
     </div>
   );
 }
