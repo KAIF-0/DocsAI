@@ -11,12 +11,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <div>
       <Suspense fallback={<LoadingPage />}>
         {/* <Header /> */}
-        <main>{children}</main>
+        <div>{children}</div>
         {/* <Footer /> */}
       </Suspense>
-    </div>
   );
 }

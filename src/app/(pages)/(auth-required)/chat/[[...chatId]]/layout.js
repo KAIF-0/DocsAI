@@ -14,13 +14,11 @@ export default function RootLayout({ children }) {
   return (
     <div>
       {/* <Suspense fallback={<LoadingPage />}> */}
-        <Script
-          src="https://cdn.lordicon.com/lordicon.js"
-          strategy="afterInteractive"
-        />
-        {/* <Header /> */}
-        <main>{children}</main>
-        {/* <Footer /> */}
+      <Script
+        src="https://cdn.lordicon.com/lordicon.js"
+        strategy="afterInteractive"
+      />
+      <div>{children}</div>
       {/* </Suspense> */}
     </div>
   );

@@ -16,14 +16,12 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <div>
-      <Suspense fallback={<LoadingPage />}>
-        <Toaster />
-        {/* <AuthWrapper/> */}
-        {/* <Header /> */}
-        <main>{children}</main>
-        {/* <Footer /> */}
-      </Suspense>
-    </div>
+    <Suspense fallback={<LoadingPage />}>
+      <Toaster />
+      {/* <AuthWrapper/> */}
+      {/* <Header /> */}
+      <div>{children}</div>
+      {/* <Footer /> */}
+    </Suspense>
   );
 }

@@ -12,17 +12,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <div>
-      <Suspense fallback={<LoadingPage />}>
-        {/* for razorpay  */}
-        <Script
-          src="https://checkout.razorpay.com/v1/checkout.js"
-          strategy="afterInteractive"
-        />
-        {/* <Header /> */}
-        <main>{children}</main>
-        {/* <Footer /> */}
-      </Suspense>
-    </div>
+    <Suspense fallback={<LoadingPage />}>
+      {/* for razorpay  */}
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="afterInteractive"
+      />
+      {/* <Header /> */}
+      <div>{children}</div>
+      {/* <Footer /> */}
+    </Suspense>
   );
 }

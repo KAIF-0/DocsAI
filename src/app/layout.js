@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
               disableTransitionOnChange
             >
               <Header />
-              <main>{children}</main>
+              <div>{children}</div>
               <Footer />
             </ThemeProvider>
           </QueryProvider>
