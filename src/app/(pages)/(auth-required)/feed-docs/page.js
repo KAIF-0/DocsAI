@@ -70,10 +70,10 @@ const SiteInsertion = () => {
     onSuccess: async (res) => {
       console.log("Success mutating:", res);
       setChatId(res?.chat.id);
-      await queryClient.invalidateQueries([
+      await queryClient.refetchQueries([
         "userChats",
-        "dashboardUserChats",
         userId,
+        "dashboardUserChats",
       ]);
 
       //incraese site integration count
@@ -244,9 +244,9 @@ const SiteInsertion = () => {
             {isComplete && (
               <div className="mt-6 md:flex gap-6 p-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border rounded-xl space-y-4">
                 <div className="flex items-center space-x-4">
-                  <sapn>
+                  <span>
                     <CheckCircle className="h-8 w-8" />
-                  </sapn>
+                  </span>
                   <div>
                     <h3 className="text-lg font-semibold">Success!</h3>
                     <p className="text-sm">

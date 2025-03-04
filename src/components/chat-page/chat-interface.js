@@ -67,8 +67,8 @@ const ChatInterface = ({
       setMessages((prev) => [...prev, res.chatMessage]);
       queryClient.invalidateQueries([
         "userChats",
-        "dashboardUserChats",
         userId,
+        "dashboardUserChats",
       ]);
 
       //increase message count in message store
@@ -313,6 +313,8 @@ const ChatInterface = ({
                 </p>
               </div>
             )}
+
+            {/* if error */}
             {chat_mutation.isError && (
               //   <div className="flex justify-center items-center p-4 mt-4 bg-red-500 text-white rounded-md">
               //     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
@@ -332,7 +334,7 @@ const ChatInterface = ({
               </div>
             )}
 
-            {/* Typing Indicator */}
+            {/* typing indicator */}
             {chat_mutation.isPending && (
               <div className=" min-w-full justify-center flex items-start  space-x-3">
                 <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
