@@ -55,7 +55,7 @@ import { useParams, useRouter } from "next/navigation";
 
 const ChatRoom = () => {
   const { userId } = useAuthStore();
-  const { data, isLoading, error, isSuccess, isError } = useQuery({
+  const { data, isLoading, error, isSuccess, isError, isFetching } = useQuery({
     queryKey: ["userChats", userId],
     queryFn: getUserChats,
     staleTime: 10 * 60 * 1000,
@@ -89,7 +89,7 @@ const ChatRoom = () => {
     }
   }, [isLoading, data, chatId, router]);
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoading && isFetching) return <LoadingPage />;
 
   return (
     <div className="min-h-fit">
