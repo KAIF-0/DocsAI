@@ -261,16 +261,36 @@ const ChatInterface = ({
                               em: ({ children }) => (
                                 <em className="italic">{children}</em>
                               ),
-                              code: ({ inline, children }) =>
-                                inline ? (
-                                  <code className="px-1 py-0.5 bg-gray-200 text-red-500 rounded text-xs sm:text-sm">
-                                    {children}
-                                  </code>
-                                ) : (
-                                  <pre className="p-3 bg-gray-900 text-white rounded-md overflow-x-auto text-xs sm:text-sm">
-                                    <code>{children}</code>
-                                  </pre>
-                                ),
+                              code: ({ inline, children }) => (
+                                <div className="relative">
+                                  {inline ? (
+                                    <code className="px-1 py-0.5 bg-gray-200 text-red-500 rounded text-xs sm:text-sm">
+                                      {children}
+                                    </code>
+                                  ) : (
+                                    <pre className="p-3 bg-gray-900 text-white rounded-md overflow-x-auto text-xs sm:text-sm">
+                                      <code>{children}</code>
+                                    </pre>
+                                  )}
+                                  <button
+                                    className="absolute right-2 top-2 p-1 hover:text-white text-gray-400 transition-colors"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(children);
+                                      toast.custom(
+                                        <Toast
+                                          type="success"
+                                          message="Code copied to clipboard!"
+                                        />,
+                                        {
+                                          position: "bottom-right",
+                                        }
+                                      );
+                                    }}
+                                  >
+                                    <CopyIcon />
+                                  </button>
+                                </div>
+                              ),
                             }}
                           >
                             {message.response}

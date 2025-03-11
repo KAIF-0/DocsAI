@@ -135,7 +135,7 @@ const SiteInsertion = () => {
         }
         return prev + 1;
       });
-    }, 2000);
+    }, 5000);
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 40000));
