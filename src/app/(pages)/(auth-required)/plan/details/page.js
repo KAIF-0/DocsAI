@@ -37,7 +37,7 @@ const SubscriptionDetails = () => {
   if (isLoading) return <LoadingPage />;
   if (isSuccess) {
     console.log("Successfully loaded subscription");
-    subscription = data.subscriptionDetails; 
+    subscription = data.subscriptionDetails;
   }
 
   return (
@@ -54,7 +54,7 @@ const SubscriptionDetails = () => {
 
         {/* Main Content */}
         {!isError ? (
-          <div className="max-w-6xl w-full space-y-8 text-center bg-gradient-to-br from-black/20 via-black/10 to-black/20 backdrop-blur-3xl rounded-2xl p-14 border border-white/40 shadow-xl">
+          <div className="max-w-6xl w-full space-y-8 text-center bg-gradient-to-br from-black/20 via-black/10 to-black/20 backdrop-blur-3xl rounded-2xl p-10 border border-white/40 shadow-xl">
             {/* Header */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full mb-4">

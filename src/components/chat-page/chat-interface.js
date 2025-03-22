@@ -28,6 +28,9 @@ import {
   X,
   LoaderCircleIcon,
   Loader,
+  Info,
+  LinkIcon,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
@@ -54,12 +57,20 @@ const ChatInterface = ({
   const queryClient = useQueryClient();
   const [messages, setMessages] = useState(null);
   const [input, setInput] = useState("");
-  const [showCommands, setShowCommands] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const { userId } = useAuthStore();
   const { chatId = null } = useParams();
   const { ispX01 } = useSubscriptionStore();
   const { msgCount, increaseMsgCount } = useMessageStore();
   const [showMessagesLeft, setShowMessagesLeft] = useState(true);
+  const [isCopied, setIsCopied] = useState(false);
+  const handleCopy = () => {
+    if (url.length > 0) {
+      navigator.clipboard.writeText(url);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+    }
+  };
   const chat_mutation = useMutation({
     mutationFn: getResponse,
     onSuccess: (res) => {
@@ -179,9 +190,14 @@ const ChatInterface = ({
               </div>
 
               <div className="flex items-center space-x-2">
-                <button className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-800">
-                  <MoreVertical className="h-5 w-5" />
-                </button>
+                <a
+                  href={url.length > 0 ? url : undefined}
+                  target={url.length > 0 ? "_blank" : undefined}
+                  rel={url.length > 0 ? "noopener noreferrer" : undefined}
+                  className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-800"
+                >
+                  <LinkIcon className="h-5 w-5" />
+                </a>
               </div>
             </div>
           </div>
@@ -396,10 +412,10 @@ const ChatInterface = ({
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
-                  onClick={() => setShowCommands(!showCommands)}
+                  onClick={() => setShowInfo(!showInfo)}
                   className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-800"
                 >
-                  <Smile className="h-5 w-5" />
+                  <Info className="h-5 w-5" />
                 </button>
 
                 <div className="flex-1 relative">
@@ -411,26 +427,60 @@ const ChatInterface = ({
                     className="w-full px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
 
-                  {showCommands && (
-                    <div className="absolute bottom-full mb-2 w-full bg-gray-800 rounded-lg shadow-lg p-2 animate-[float_0.3s_ease-out]">
-                      <div className="grid grid-cols-2 gap-2">
-                        <button className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors">
-                          <ImageIcon className="h-4 w-4" />
-                          <span>Add Image</span>
-                        </button>
-                        <button className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors">
-                          <Paperclip className="h-4 w-4" />
-                          <span>Attach File</span>
-                        </button>
-                        <button className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors">
-                          <Code className="h-4 w-4" />
-                          <span>Code Block</span>
-                        </button>
-                        <button className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors">
-                          <Mic className="h-4 w-4" />
-                          <span>Voice Input</span>
+                  {showInfo && (
+                    <div className="absolute bottom-full mb-3 w-full bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 rounded-xl shadow-2xl p-4 md:p-5 transform transition-all duration-300 ease-out animate-[float_0.5s_ease-out] ">
+                      {/* Header Section with Icon and Close Button */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-5 h-5 text-blue-400" />
+                          <h2 className="text-xl text-white font-bold tracking-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                            Documentation Info
+                          </h2>
+                        </div>
+                        <button
+                          onClick={() => setShowInfo(!showInfo)}
+                          className="text-gray-400 hover:text-white transition-colors"
+                        >
+                          <X className="w-5 h-5" />
                         </button>
                       </div>
+
+                      {/* Document Name */}
+                      <p className=" text-gray-300 text-sm flex items-center gap-2">
+                        <span className="font-medium">
+                          Name of the Document:
+                        </span>
+                        <span className="text-blue-300">
+                          {title.length > 0
+                            ? title.charAt(0).toUpperCase() + title.slice(1)
+                            : "Not Available"}
+                        </span>
+                      </p>
+
+                      {/* Site URL with Copy Button */}
+                      <p className=" text-gray-300 text-sm flex items-center gap-2">
+                        <span className="font-medium">Site URL:</span>
+                        <a
+                          href={url.length > 0 ? url : undefined}
+                          target={url.length > 0 ? "_blank" : undefined}
+                          rel={
+                            url.length > 0 ? "noopener noreferrer" : undefined
+                          }
+                          className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200 underline underline-offset-2 flex items-center gap-1"
+                        >
+                          <LinkIcon className="w-4 h-4" />
+                          {url.length > 0 ? url : "Not Available!"}
+                        </a>
+                        {url.length > 0 && (
+                          <button
+                            onClick={handleCopy}
+                            className=" p-1 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors text-gray-300 hover:text-white"
+                            title={isCopied ? "Copied!" : "Copy URL"}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        )}
+                      </p>
                     </div>
                   )}
                 </div>
