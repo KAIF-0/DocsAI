@@ -64,6 +64,7 @@ const ChatRoom = () => {
   const [chatDetails, setChatDetails] = useState({
     url: "",
     title: "",
+    isActive: false,
     messages: null,
   });
   const router = useRouter();
@@ -81,6 +82,7 @@ const ChatRoom = () => {
         ...prev,
         url: chat.url,
         title: chat.key,
+        isActive: chat.isActive,
         messages: chat.messages,
       }));
     } else {
@@ -104,6 +106,7 @@ const ChatRoom = () => {
       <ChatInterface
         url={chatDetails.url}
         title={chatDetails.title}
+        isActive={chatDetails.isActive}
         messages={chatDetails.messages}
         isSidebarOpen={isSidebarOpen}
       />

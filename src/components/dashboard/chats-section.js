@@ -87,12 +87,21 @@ const Chats = () => {
                             <p className="text-sm text-gray-400">{chat.url}</p>
                           </div>
                         </div>
-                        <span
-                          className="px-2 py-1 text-xs font-medium rounded-full
-                                 bg-green-500/20 text-green-400"
-                        >
-                          Active
-                        </span>
+                        {chat.isActive ? (
+                          <span
+                            className="px-2 py-1 text-xs font-medium rounded-full
+                                   bg-green-500/20 text-green-400"
+                          >
+                            Active
+                          </span>
+                        ) : (
+                          <span
+                            className="px-2 py-1 text-xs font-medium rounded-full
+                                   bg-red-500/20 text-red-400"
+                          >
+                            Inactive
+                          </span>
+                        )}
                       </div>
                       <div className="mt-3 flex items-center text-sm text-gray-400">
                         <Clock className="size-4 mr-2" />

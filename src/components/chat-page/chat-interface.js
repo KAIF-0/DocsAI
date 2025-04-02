@@ -31,6 +31,9 @@ import {
   Info,
   LinkIcon,
   FileText,
+  ThumbsDown,
+  ShieldCheck,
+  ShieldBan,
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
@@ -50,6 +53,7 @@ import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 
 const ChatInterface = ({
   url,
+  isActive,
   title,
   isSidebarOpen,
   messages: messagesArray = [],
@@ -190,14 +194,19 @@ const ChatInterface = ({
               </div>
 
               <div className="flex items-center space-x-2">
-                <a
-                  href={url.length > 0 ? url : undefined}
-                  target={url.length > 0 ? "_blank" : undefined}
-                  rel={url.length > 0 ? "noopener noreferrer" : undefined}
-                  className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-800"
-                >
-                  <LinkIcon className="h-5 w-5" />
-                </a>
+                <div className="flex items-center">
+                  {isActive ? (
+                    <span className="flex flex-col justify-center items-center text-green-500">
+                      <ShieldCheck className="h-5 w-5 mr-1" />
+                      <span className="text-md">Active</span>
+                    </span>
+                  ) : (
+                    <span className="flex flex-col justify-center items-center text-red-500">
+                      <ShieldBan className="h-5 w-5 mr-1" />
+                      <span className="text-md">Inactive</span>
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
