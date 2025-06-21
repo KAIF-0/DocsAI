@@ -189,7 +189,7 @@ export const useAuthStore = create(
       logout: async () => {
         try {
           Cookies.remove("sessionToken");
-
+          Cookies.remove("subToken");
           set({
             email: null,
             isLoggedIn: false,
@@ -216,11 +216,14 @@ export const useAuthStore = create(
 
       getSessionInfo: async () => {
         try {
-          const sessionInfo = await account.getSession("current");
-          console.log("SESSION:  ", sessionInfo);
+          await account.getSession("current");
 
-          const userInfo = await account.get();
-          console.log("USERINFO:  ", userInfo);
+          await account.get();
+
+          const sessionCookie = Cookies.get("sessionToken");
+          if (!sessionCookie) {
+            throw new Error("Session cookie not found!");
+          }
 
           return {
             success: true,
@@ -235,9 +238,8 @@ export const useAuthStore = create(
 
       cleanStore: async () => {
         try {
-          console.log("Cleaning Store!");
-
           Cookies.remove("sessionToken");
+          Cookies.remove("subToken");
           set({
             email: null,
             isLoggedIn: false,
@@ -271,8 +273,10 @@ export const useAuthStore = create(
             state
               ?.getSessionInfo() //checking appwrite auth session
               .then(async (sessionPresent) => {
-                if (!sessionPresent?.success) await state?.cleanStore(); //cleaning store if session is not present
-                console.log("Session present!");
+                if (!sessionPresent?.success) {
+                  console.log("Session not present! Cleaning store!");
+                  await state?.cleanStore(); //cleaning store if session is not present
+                } else console.log("Session present!");
               });
             state?.setHydrated();
           }

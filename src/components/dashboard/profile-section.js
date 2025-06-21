@@ -21,6 +21,7 @@ import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 import toast from "react-hot-toast";
 import Toast from "../toast";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Profile = ({}) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -28,6 +29,7 @@ const Profile = ({}) => {
   const [tempUsername, setTempUsername] = useState(username);
   const { subscription, ispX01 } = useSubscriptionStore();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const router = useRouter();
 
   const handleEditSubmit = () => {
     setTempUsername(tempUsername);
@@ -59,7 +61,6 @@ const Profile = ({}) => {
   const notifications = [
     { id: 1, text: "New feature available: AI-powered search", time: "1h ago" },
     { id: 2, text: "Documentation update completed", time: "2h ago" },
-    { id: 3, text: "Weekly usage report ready", time: "1d ago" },
   ];
   return (
     <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 mb-8">
@@ -145,18 +146,19 @@ const Profile = ({}) => {
                     </p>
                   </div>
                 ))}
-                <div className="px-4 py-2 border-t border-gray-700">
-                  <button className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
-                    View all notifications
-                  </button>
-                </div>
               </div>
             )}
           </div>
 
           {/* Quick Actions */}
           <div className="flex items-center space-x-2">
-            <button onClick={()=>logout()} className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-700/50">
+            <button
+              onClick={async () => {
+                logout();
+                router.push("/auth/signin");
+              }}
+              className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-700/50"
+            >
               <LogOut className="w-6 h-6" />
             </button>
           </div>

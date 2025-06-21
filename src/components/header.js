@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/app/stores/authStore";
 import { Avatar } from "flowbite-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 
 export function Header() {
@@ -23,6 +23,7 @@ export function Header() {
   const { ispX01 } = useSubscriptionStore();
   const { isLoggedIn, logout } = useAuthStore();
   const pathName = usePathname();
+  const router = useRouter();
   const tierInfo = "free";
 
   return (
@@ -127,16 +128,26 @@ export function Header() {
 
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      <div onClick={() => logout()}>Sign Out</div>
+                      <div
+                        onClick={async () => {
+                          logout();
+                          router.push("/auth/signin");
+                        }}
+                      >
+                        Sign Out
+                      </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
             ) : (
-              <Link href="/auth/signin" className="flex items-center space-x-1 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 transition-colors">
-              {/* <LogIn className="h-4 w-4" /> */}
-              <span>Get Started</span>
-            </Link>
+              <Link
+                href="/auth/signin"
+                className="flex items-center space-x-1 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                {/* <LogIn className="h-4 w-4" /> */}
+                <span>Get Started</span>
+              </Link>
             )}
           </div>
         </div>

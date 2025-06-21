@@ -1,5 +1,10 @@
 "use client";
-import React, { useCallback, useEffect, useLayoutEffect } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { LogIn, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/app/stores/authStore";
@@ -7,23 +12,29 @@ import { useAuthStore } from "@/app/stores/authStore";
 const GoogleSignInSuccess = () => {
   const router = useRouter();
   const { OAuthLogin } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(true);
 
   const googleLogin = useCallback(() => {
     return OAuthLogin();
   }, [OAuthLogin]);
   useEffect(() => {
+    setIsLoading(true);
     // OAuthLogin();
-    googleLogin().then((response) => {
-      if (response?.success) {
-        console.log(response.message);
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 10000);
-      } else {
-        console.log("Google Login Error: ", response.message);
-        router.push("/auth/google/failure");
-      }
-    });
+    googleLogin()
+      .then((response) => {
+        if (response?.success) {
+          console.log(response.message);
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 10000);
+        } else {
+          console.log("Google Login Error: ", response.message);
+          router.push("/auth/google/failure");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [googleLogin, router]);
 
   return (
@@ -67,8 +78,11 @@ const GoogleSignInSuccess = () => {
 
         {/* Manual redirect button */}
         <button
+          disabled={isLoading}
           onClick={() => router.push("/dashboard")}
-          className="mt-8 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105"
+          className={`mt-8 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105 ${
+            isLoading ? "cursor-not-allowed opacity-50" : ""
+          }`}
         >
           Continue to Dashboard
           <ArrowRight className="ml-2 h-5 w-5" />

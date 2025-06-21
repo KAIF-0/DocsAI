@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/app/stores/authStore";
@@ -7,16 +7,22 @@ import { useAuthStore } from "@/app/stores/authStore";
 const SignInSuccess = () => {
   const router = useRouter();
   const { setAuthCookies } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    setAuthCookies().then((isCookiesSaved) => {
-      if (isCookiesSaved?.success) {
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 10000);
-      } else {
-        console.log(isCookiesSaved?.message);
-      }
-    });
+    setIsLoading(true);
+    setAuthCookies()
+      .then((isCookiesSaved) => {
+        if (isCookiesSaved?.success) {
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 10000);
+        } else {
+          console.log(isCookiesSaved?.message);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [router, setAuthCookies]);
 
   return (
@@ -51,8 +57,11 @@ const SignInSuccess = () => {
 
         {/* Manual redirect button */}
         <button
+          disabled={isLoading}
           onClick={() => router.push("/dashboard")}
-          className="mt-8 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105"
+          className={`mt-8 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105 ${
+            isLoading ? "cursor-not-allowed opacity-50" : ""
+          }`}
         >
           Go to Dashboard
           <ArrowRight className="ml-2 h-5 w-5" />
