@@ -20,6 +20,7 @@ import { useAuthStore } from "@/app/stores/authStore";
 import { createChat } from "@/app/helpers/chatHelper";
 import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
 import { useMessageStore } from "@/app/stores/messageStore";
+import DocsStatusModal from "@/components/chat-page/docsStatusModal";
 
 const SiteInsertion = () => {
   const [url, setUrl] = useState("");
@@ -32,6 +33,7 @@ const SiteInsertion = () => {
   const queryClient = useQueryClient();
   const { ispX01 } = useSubscriptionStore();
   const { siteCount, increaseSiteCount } = useMessageStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const steps = [
     {
@@ -135,10 +137,10 @@ const SiteInsertion = () => {
         }
         return prev + 1;
       });
-    }, 5000);
+    }, 2000);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 40000));
+      await new Promise((resolve) => setTimeout(resolve, 10000));
       await docs_mutation.mutateAsync({
         userId,
         url,
@@ -250,17 +252,17 @@ const SiteInsertion = () => {
                   <div>
                     <h3 className="text-lg font-semibold">Success!</h3>
                     <p className="text-sm">
-                      Your documentation site has been successfully added and is
-                      ready to use.
+                      Your site documentation feeding job has started and will
+                      be ready to use after a few moments.
                     </p>
                   </div>
                 </div>
-                <Link
-                  href={`/chat/${chatId}`}
-                  className="min-w-fit mx-auto flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-[1.02]"
+                <div
+                  onClick={() => setIsModalOpen(true)}
+                  className="min-w-fit cursor-pointer mx-auto flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-[1.02]"
                 >
                   Start with Your Docs
-                </Link>
+                </div>
               </div>
             )}
 
@@ -280,6 +282,12 @@ const SiteInsertion = () => {
           </form>
         </div>
       </div>
+
+      <DocsStatusModal
+        chatId={chatId}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

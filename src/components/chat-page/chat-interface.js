@@ -201,9 +201,9 @@ const ChatInterface = ({
                       <span className="text-md">Active</span>
                     </span>
                   ) : (
-                    <span className="flex flex-col justify-center items-center text-red-500">
+                    <span className="flex animate-pulse flex-col justify-center items-center text-red-500">
                       <ShieldBan className="h-5 w-5 mr-1" />
-                      <span className="text-md">Inactive</span>
+                      <span className="text-md ">Processing...</span>
                     </span>
                   )}
                 </div>
