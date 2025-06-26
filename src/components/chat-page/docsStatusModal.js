@@ -17,7 +17,7 @@ const DocsStatusModal = ({ chatId, isOpen, onClose }) => {
 
   const handleGoToChat = () => {
     router.push(`/chat/${chatId}`);
-    onClose();
+    // onClose();
   };
 
   if (!isOpen) return null;
