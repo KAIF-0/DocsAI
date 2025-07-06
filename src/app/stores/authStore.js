@@ -10,7 +10,7 @@ import { env } from "@/env";
 
 export const useAuthStore = create(
   persist(
-    immer((set) => ({
+    immer((set, get) => ({
       email: null,
       isLoggedIn: false,
       user: null,
@@ -216,6 +216,7 @@ export const useAuthStore = create(
 
       getSessionInfo: async () => {
         try {
+          // console.log(get().user)
           await account.getSession("current");
 
           await account.get();
