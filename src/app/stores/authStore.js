@@ -69,7 +69,7 @@ export const useAuthStore = create(
           //for middleware trigger
           Cookies.set("sessionToken", sessionInfo.$id, {
             secure: true,
-            expires: 30,
+            expires: 10,
           });
 
           set({
@@ -148,7 +148,7 @@ export const useAuthStore = create(
 
           Cookies.set("sessionToken", sessionInfo.$id, {
             secure: true,
-            expires: 30,
+            expires: 10,
           });
 
           console.log("Cookies saved successfully!");
@@ -217,9 +217,9 @@ export const useAuthStore = create(
       getSessionInfo: async () => {
         try {
           // console.log(get().user)
-          await account.getSession("current");
+          // await account.getSession("current");
 
-          await account.get();
+          // await account.get();
 
           const sessionCookie = Cookies.get("sessionToken");
           if (!sessionCookie) {
