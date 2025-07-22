@@ -84,7 +84,9 @@ const Chats = () => {
                                 chat.key.slice(1)}{" "}
                               Documentation
                             </h3>
-                            <p className="text-sm text-gray-400">{chat.url}</p>
+                            <p className="text-sm text-gray-400">
+                              {chat?.url.slice(0, 30)}...
+                            </p>
                           </div>
                         </div>
                         {chat.isActive ? (
@@ -160,12 +162,12 @@ const Chats = () => {
                         <span>
                           <MessageSquare className="h-5 w-5 text-purple-400 mr-3 mt-1" />
                         </span>
-                        <div>
+                        <div className="overflow-hidden">
                           <h3 className="text-lg font-medium text-white line-clamp-1">
-                            {message.question}
+                            {message?.question}
                           </h3>
                           <p className="text-sm text-gray-400 mt-1 line-clamp-1">
-                            {message.response}
+                            {message?.response}
                           </p>
                           <div className="mt-2 flex items-center text-xs text-gray-500">
                             <Clock className="size-4 mr-1" />
