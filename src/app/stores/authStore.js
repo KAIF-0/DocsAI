@@ -12,7 +12,6 @@ export const useAuthStore = create(
   persist(
     immer((set, get) => ({
       email: null,
-      isSessionLoading: true,
       isLoggedIn: false,
       user: null,
       userId: null,
@@ -270,7 +269,6 @@ export const useAuthStore = create(
       name: "_user/data",
       onRehydrateStorage() {
         return async (state, error) => {
-          state?.set({ isSessionLoading: true });
           if (!error) {
             await state
               ?.getSessionInfo() //checking appwrite auth session
@@ -282,7 +280,6 @@ export const useAuthStore = create(
               });
             state?.setHydrated();
           }
-          state?.set({ isSessionLoading: false });
         };
       },
     }

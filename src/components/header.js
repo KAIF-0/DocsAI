@@ -22,7 +22,7 @@ import { Skeleton } from "./ui/skeleton";
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { ispX01 } = useSubscriptionStore();
-  const { isLoggedIn, logout, isSessionLoading } = useAuthStore();
+  const { isLoggedIn, logout, hydrated } = useAuthStore();
   const pathName = usePathname();
   const router = useRouter();
   const tierInfo = "free";
@@ -97,7 +97,7 @@ export function Header() {
                 <Menu className="h-5 w-5" />
               )}
             </Button>
-            {isSessionLoading ? (
+            {!hydrated ? (
               <Skeleton className="bg-white/15 h-10 w-[120px]" />
             ) : isLoggedIn ? (
               <div className="text-xl">
