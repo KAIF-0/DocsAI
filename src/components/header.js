@@ -17,11 +17,12 @@ import { useAuthStore } from "@/app/stores/authStore";
 import { Avatar } from "flowbite-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSubscriptionStore } from "@/app/stores/subscriptionStore";
+import { Skeleton } from "./ui/skeleton";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { ispX01 } = useSubscriptionStore();
-  const { isLoggedIn, logout } = useAuthStore();
+  const { isLoggedIn, logout, isSessionLoading } = useAuthStore();
   const pathName = usePathname();
   const router = useRouter();
   const tierInfo = "free";
@@ -96,7 +97,9 @@ export function Header() {
                 <Menu className="h-5 w-5" />
               )}
             </Button>
-            {isLoggedIn ? (
+            {isSessionLoading ? (
+              <Skeleton className="bg-white/15 h-10 w-[120px]" />
+            ) : isLoggedIn ? (
               <div className="text-xl">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
