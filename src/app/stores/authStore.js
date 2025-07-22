@@ -69,7 +69,7 @@ export const useAuthStore = create(
           //for middleware trigger
           Cookies.set("sessionToken", sessionInfo.$id, {
             secure: true,
-            expires: 10,
+            expires: 30,
           });
 
           set({
@@ -148,7 +148,7 @@ export const useAuthStore = create(
 
           Cookies.set("sessionToken", sessionInfo.$id, {
             secure: true,
-            expires: 10,
+            expires: 30,
           });
 
           console.log("Cookies saved successfully!");
@@ -217,14 +217,13 @@ export const useAuthStore = create(
       getSessionInfo: async () => {
         try {
           // console.log(get().user)
-          // await account.getSession("current");
+          await account.getSession("current");
+          await account.get();
 
-          // await account.get();
-
-          const sessionCookie = Cookies.get("sessionToken");
-          if (!sessionCookie) {
-            throw new Error("Session cookie not found!");
-          }
+          // const sessionCookie = Cookies.get("sessionToken");
+          // if (!sessionCookie) {
+          //   throw new Error("Session cookie not found!");
+          // }
 
           return {
             success: true,
@@ -269,9 +268,9 @@ export const useAuthStore = create(
     {
       name: "_user/data",
       onRehydrateStorage() {
-        return (state, error) => {
+        return async (state, error) => {
           if (!error) {
-            state
+            await state
               ?.getSessionInfo() //checking appwrite auth session
               .then(async (sessionPresent) => {
                 if (!sessionPresent?.success) {
