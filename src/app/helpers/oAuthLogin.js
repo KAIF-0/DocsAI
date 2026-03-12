@@ -1,5 +1,5 @@
 "use client";
-import { client, account } from "@/configs/appwrite/appwrite-config";
+import { client, account } from "@/configs/appwrite-config";
 import { env } from "@/env";
 import { OAuthProvider } from "appwrite";
 

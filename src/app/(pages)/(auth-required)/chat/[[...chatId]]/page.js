@@ -30,28 +30,12 @@ import RecentChats from "@/components/chat-page/recents-chats";
 import ChatInterface from "@/components/chat-page/chat-interface";
 import { useAuthStore } from "@/app/stores/authStore";
 import { getUserChats } from "@/app/helpers/chatHelper";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingPage from "@/app/(pages)/loading";
 import toast from "react-hot-toast";
 import Toast from "@/components/toast";
 import { useParams, useRouter } from "next/navigation";
-
-// interface Message {
-//   id: number;
-//   type: 'user' | 'ai';
-//   content: string;
-//   timestamp: Date;
-//   reactions?: number;
-//   isCode?: boolean;
-// }
-
-// interface RecentChat {
-//   id: number;
-//   title: string;
-//   lastMessage: string;
-//   timestamp: Date;
-//   unread?: boolean;
-// }
+import { supabase } from "@/configs/supabase-config";
 
 const ChatRoom = () => {
   const { userId } = useAuthStore();
@@ -69,6 +53,7 @@ const ChatRoom = () => {
   });
   const router = useRouter();
   const { chatId = null } = useParams();
+  const queryClient = useQueryClient();
 
   // console.log(isLoading, !isSuccess);
 
@@ -90,6 +75,43 @@ const ChatRoom = () => {
       router.push("/chat");
     }
   }, [isLoading, data, chatId, router]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("ChatStatusChannel")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "Chat" },
+        (payload) => {
+          const updatedChat = payload.new;
+
+          //check if this chat belongs to this user
+          if (updatedChat.userId === userId) {
+            console.log(updatedChat)
+
+            //refetch all chats
+            queryClient.refetchQueries(["userChats", userId]);
+
+            // if user is currently on this chat page
+            if (updatedChat.id === chatId[0] && updatedChat.isActive) {
+              setChatDetails((prev) => ({
+                ...prev,
+                isActive: true,
+              }));
+
+              toast.custom(
+                <Toast type="success" message="Docs scraped successfully!" />
+              );
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [chatId, userId, queryClient]);
 
   if (isLoading) return <LoadingPage />;
 

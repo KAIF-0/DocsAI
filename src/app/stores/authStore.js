@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
 import { AppwriteException, ID, Query } from "appwrite";
-import { account } from "@/configs/appwrite/appwrite-config";
+import { account } from "@/configs/appwrite-config";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { env } from "@/env";

@@ -4,7 +4,7 @@ import { Mail, Lock, Eye, EyeOff, LogIn, Brain, Loader } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/app/stores/authStore";
 import { Account } from "appwrite";
-import { account } from "@/configs/appwrite/appwrite-config";
+import { account } from "@/configs/appwrite-config";
 import { useRouter } from "next/navigation";
 import { loginWithOAuth } from "@/app/helpers/oAuthLogin";
 import toast from "react-hot-toast";

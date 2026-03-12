@@ -1,4 +1,4 @@
-import { env } from "../../env";
+import { env } from "../env";
 import { Account, Client } from "appwrite";
 
 export const client = new Client();
